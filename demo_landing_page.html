@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LPU Academic Copilot - Interactive Demo Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lpu: {
+              orange: "#E77817",
+              orangeHover: "#D35400",
+              charcoal: "#1A252C",
+              charcoalLight: "#2D3748",
+              charcoalDark: "#0B0F12"
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #070A0D;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .glass-panel {
+      background: rgba(26, 37, 44, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-panel-glow {
+      background: rgba(26, 37, 44, 0.55);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(231, 120, 23, 0.25);
+      box-shadow: 0 8px 32px 0 rgba(231, 120, 23, 0.1);
+    }
+    .glass-input {
+      background: rgba(11, 15, 18, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-input:focus {
+      border-color: #E77817;
+      outline: none;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070A0D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2D3748;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="text-slate-100 overflow-x-hidden min-h-screen flex flex-col justify-between relative">
+
+  <!-- Background Orbs -->
+  <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-lpu-orange/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto w-full px-8 h-20 flex items-center justify-between z-10">
+    <div class="flex items-center gap-3">
+      <div class="bg-lpu-orange p-2 rounded-xl text-white shadow-lg">
+        <i data-lucide="cpu" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <span class="font-bold text-lg leading-tight tracking-wider text-white">LPU Academic</span>
+        <span class="text-xs text-lpu-orange font-bold tracking-widest block">COPILOT</span>
+      </div>
+    </div>
+    <div class="bg-lpu-orange/10 border border-lpu-orange/20 text-lpu-orange px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-lpu-orange animate-pulse"></span>
+      FDP DEMO PORTAL (ZERO-SETUP)
+    </div>
+  </header>
+
+  <!-- Main Views Container -->
+  <main class="max-w-6xl mx-auto w-full px-8 flex-1 flex flex-col justify-center py-8 z-10">
+    
+    <!-- VIEW 1: LANDING PAGE -->
+    <div id="view-landing" class="flex flex-col items-center text-center py-12">
+      <div class="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-lpu-orange flex items-center gap-2 mb-6">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        10-AGENT COLLABORATION PIPELINE
+      </div>
+
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight max-w-4xl">
+        Automate Course Planning with <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-lpu-orange via-amber-500 to-orange-400">Agentic Orchestration</span>
+      </h1>
+
+      <p class="text-gray-400 text-sm md:text-base max-w-2xl mt-6 leading-relaxed font-light">
+        Upload your syllabus PDF. Let ten autonomous AI agents coordinate to generate week-by-week lesson plans, assignments, MCQ quizzes, Bloom's Taxonomy maps, and exam papers in minutes.
+      </p>
+
+      <div class="mt-8 flex gap-4">
+        <button onclick="switchView('view-app')" class="bg-lpu-orange hover:bg-lpu-orangeHover px-8 py-4 rounded-xl font-bold text-white shadow-lg transition-all hover:scale-105 flex items-center gap-2">
+          <span>Start Interactive Demo</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Features Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-20 text-left">
+        <div class="glass-panel p-6 rounded-2xl flex flex-col gap-3">
+          <div class="bg-lpu-orange/10 p-2.5 rounded-xl text-lpu-orange w-max">
+            <i data-lucide="book-open" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-white">Full Course Planner</h3>
+          <p class="text-xs text-gray-500 leading-relaxed font-light">Generates 15-week lecture topics, references, and pedagogy.</p>
+        </div>
+        <div class="glass-panel p-6 rounded-2xl flex flex-col gap-3">
+          <div class="bg-lpu-orange/10 p-2.5 rounded-xl text-lpu-orange w-max">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-white">Bloom's & CO Audits</h3>
+          <p class="text-xs text-gray-500 leading-relaxed font-light">Maps and weights assessment questions against taxonomy standards.</p>
+        </div>
+        <div class="glass-panel p-6 rounded-2xl flex flex-col gap-3">
+          <div class="bg-lpu-orange/10 p-2.5 rounded-xl text-lpu-orange w-max">
+            <i data-lucide="file-text" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-bold text-white">Publication-grade PDFs</h3>
+          <p class="text-xs text-gray-500 leading-relaxed font-light">Generates beautifully formatted, styled academic reports.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: INTERACTIVE SIMULATOR (DASHBOARD) -->
+    <div id="view-app" class="hidden flex flex-col gap-6">
+      
+      <!-- Upper Section: Mock Upload Card -->
+      <div id="upload-panel" class="glass-panel p-8 rounded-2xl flex flex-col items-center gap-6 max-w-xl mx-auto w-full text-center">
+        <div class="bg-lpu-orange/10 p-4 rounded-full text-lpu-orange">
+          <i data-lucide="file-up" class="w-8 h-8"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg text-white">Test Syllabus Upload</h3>
+          <p class="text-xs text-gray-500 mt-1">Select a syllabus to trigger the 10-Agent pipeline.</p>
+        </div>
+        
+        <div class="w-full bg-black/30 border border-white/5 p-4 rounded-xl text-xs text-left text-gray-400 flex items-center justify-between">
+          <span class="font-mono">sample_syllabus.pdf</span>
+          <span class="text-[10px] text-lpu-orange font-bold uppercase tracking-wider">Ready to upload</span>
+        </div>
+
+        <button onclick="startSimulation()" class="w-full bg-lpu-orange hover:bg-lpu-orangeHover py-3.5 rounded-xl font-bold text-white transition-all shadow-md">
+          Start Agent Generation Pipeline
+        </button>
+      </div>
+
+      <!-- Execution Pipeline Panel -->
+      <div id="pipeline-panel" class="hidden flex flex-col lg:flex-row gap-6">
+        
+        <!-- Timeline Connector -->
+        <div class="flex-1 glass-panel p-6 rounded-2xl">
+          <h4 class="font-bold text-sm text-white mb-6">Orchestration Timeline</h4>
+          <div class="relative border-l border-white/10 ml-3 pl-6 flex flex-col gap-4">
+            
+            <div id="step-0" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-0"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-0">PDF Parser</span>
+            </div>
+            
+            <div id="step-1" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-1"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-1">Planning Agent</span>
+            </div>
+
+            <div id="step-2" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-2"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-2">Lesson Plan Agent</span>
+            </div>
+
+            <div id="step-3" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-3"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-3">Assignment Agent</span>
+            </div>
+
+            <div id="step-4" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-4"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-4">Quiz Agent</span>
+            </div>
+
+            <div id="step-5" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-5"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-5">Question Paper Agent</span>
+            </div>
+
+            <div id="step-6" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-6"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-6">Bloom Taxonomy Agent</span>
+            </div>
+
+            <div id="step-7" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-7"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-7">CO Mapping Agent</span>
+            </div>
+
+            <div id="step-8" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-8"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-8">Reviewer Agent</span>
+            </div>
+
+            <div id="step-9" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-9"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-9">Academic Quality Agent</span>
+            </div>
+
+            <div id="step-10" class="relative flex items-center gap-3 text-xs text-gray-500">
+              <span class="absolute -left-[30px] bg-lpu-charcoalDark rounded-full p-1 border border-white/10" id="icon-10"><i data-lucide="circle" class="w-3.5 h-3.5"></i></span>
+              <span class="font-medium" id="label-10">PDF Report Generator</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Terminal Logs -->
+        <div class="flex-1 glass-panel p-6 rounded-2xl flex flex-col h-[520px]">
+          <h4 class="font-bold text-sm text-white mb-4">Live Agent Output Stream</h4>
+          <div id="terminal" class="flex-1 overflow-y-auto bg-black/40 rounded-xl p-4 font-mono text-[11px] text-gray-400 border border-white/5 flex flex-col gap-2.5">
+            <!-- Simulated stdout logs inject here -->
+            <div class="text-gray-600">Waiting for simulation to start...</div>
+          </div>
+          
+          <button id="btn-results" onclick="showResults()" disabled class="mt-4 bg-lpu-orange disabled:bg-white/5 disabled:text-gray-600 py-3.5 rounded-xl font-bold text-white transition-all text-xs">
+            Review Generated Artifacts & PDF
+          </button>
+        </div>
+
+      </div>
+
+      <!-- VIEW 3: RESULTS PANEL -->
+      <div id="results-panel" class="hidden flex flex-col gap-6">
+        <div class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Modern AI Systems & Agentic Orchestration (CSE402)</h2>
+            <p class="text-xs text-gray-500 mt-1">Audit rating: 88.5/100 | Generated package completed successfully.</p>
+          </div>
+          <button onclick="alert('Downloading compiled ReportLab PDF package...')" class="bg-lpu-orange hover:bg-lpu-orangeHover text-white px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Download PDF Report</span>
+          </button>
+        </div>
+
+        <!-- tab views switcher -->
+        <div class="flex border-b border-white/10 gap-2 pb-px overflow-x-auto">
+          <button onclick="switchTab('tab-lp')" class="tab-btn px-4 py-3 text-xs font-bold border-b-2 border-lpu-orange text-lpu-orange">15-Week Lesson Plan</button>
+          <button onclick="switchTab('tab-asn')" class="tab-btn px-4 py-3 text-xs font-bold border-b-2 border-transparent text-gray-400">Assignments</button>
+          <button onclick="switchTab('tab-qz')" class="tab-btn px-4 py-3 text-xs font-bold border-b-2 border-transparent text-gray-400">20 MCQs Quiz</button>
+          <button onclick="switchTab('tab-qa')" class="tab-btn px-4 py-3 text-xs font-bold border-b-2 border-transparent text-gray-400">Quality Check</button>
+        </div>
+
+        <!-- TAB content packages -->
+        <div class="glass-panel p-6 rounded-2xl min-h-[300px] text-xs">
+          
+          <!-- TAB: LESSON PLAN -->
+          <div id="tab-lp" class="tab-content">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b border-white/10 text-gray-500 font-semibold pb-2">
+                  <th class="pb-2 w-16">Week</th>
+                  <th class="pb-2">Lecture Focus</th>
+                  <th class="pb-2">Pedagogical Methods</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-gray-300">
+                <tr>
+                  <td class="py-3 font-bold text-white">Week 1</td>
+                  <td class="py-3">Introduction to Transformers & API Drivers. Deep dive on parameters.</td>
+                  <td class="py-3">Interactive Lecture / Lab setups</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-bold text-white">Week 2</td>
+                  <td class="py-3">System prompts architectures, few-shot structures, and local caches.</td>
+                  <td class="py-3">Flipped classroom discussion</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-bold text-white">Week 3</td>
+                  <td class="py-3">Chain of thought prompts and prompt decomposition strategies.</td>
+                  <td class="py-3">Practical laboratory coding</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-bold text-white">Week 4</td>
+                  <td class="py-3">Single-agent loop designs. Handling API errors and connection timeouts.</td>
+                  <td class="py-3">Case study analysis</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-bold text-white">Week 5</td>
+                  <td class="py-3">Integrating agent tool parameters. Tool definition binding models.</td>
+                  <td class="py-3">Interactive programming review</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB: ASSIGNMENTS -->
+          <div id="tab-asn" class="tab-content hidden flex flex-col gap-6">
+            <div>
+              <h4 class="font-bold text-white text-sm mb-2">Assignment 1: Prompt Engineering & System Design (Marks: 30)</h4>
+              <p class="text-gray-400 mb-2">Instructions: Submit your responses as a PDF. Include class diagram layouts where required.</p>
+              <ul class="list-disc pl-4 text-gray-300 flex flex-col gap-2">
+                <li>Q1. Design a few-shot prompt configuration to extract name variables from medical history logs. (15 Marks)</li>
+                <li>Q2. Diagram a single-agent loop schema showing retry states. (15 Marks)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- TAB: MCQS -->
+          <div id="tab-qz" class="tab-content hidden flex flex-col gap-4">
+            <div>
+              <p class="font-semibold text-white">Q1. What is the role of temperature in generative model outputs?</p>
+              <div class="grid grid-cols-2 gap-2 mt-2">
+                <div class="p-2 border border-white/5 bg-white/5 rounded">A) Modulates token memory sizes</div>
+                <div class="p-2 border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 rounded">B) Controls output token randomness (Correct)</div>
+                <div class="p-2 border border-white/5 bg-white/5 rounded">C) Increases prompt token throughput</div>
+                <div class="p-2 border border-white/5 bg-white/5 rounded">D) Formulates vector embeddings</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: QUALITY AUDIT -->
+          <div id="tab-qa" class="tab-content hidden flex flex-col gap-4 text-xs">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <span class="text-gray-500 block uppercase font-bold text-[9px] mb-1">Coverage Score</span>
+                <span class="text-lg font-bold text-white">89/100</span>
+              </div>
+              <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <span class="text-gray-500 block uppercase font-bold text-[9px] mb-1">Alignment Score</span>
+                <span class="text-lg font-bold text-white">92/100</span>
+              </div>
+              <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <span class="text-gray-500 block uppercase font-bold text-[9px] mb-1">Clarity Score</span>
+                <span class="text-lg font-bold text-white">85/100</span>
+              </div>
+              <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <span class="text-gray-500 block uppercase font-bold text-[9px] mb-1">Pedagogy Score</span>
+                <span class="text-lg font-bold text-white">88/100</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold text-white mb-2">Audit Feedback and Recommendations:</h4>
+              <p class="text-gray-400 leading-relaxed">
+                • <b>Issue:</b> Continuous assessment criteria in Week 14 lacks concrete practical exercises.<br/>
+                • <b>Recommendation:</b> Inject a small GitHub classroom link or boilerplate template folder.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-4 text-center text-[10px] text-gray-600 bg-lpu-charcoalDark z-10">
+    Lovely Professional University — FDP Modern AI systems Demo.
+  </footer>
+
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    function switchView(viewId) {
+      document.getElementById('view-landing').classList.add('hidden');
+      document.getElementById('view-app').classList.add('hidden');
+      document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    const simLogs = [
+      { step: 0, tag: "System", text: "Initializing parsing process. Uploading sample_syllabus.pdf (15.4 KB)..." },
+      { step: 0, tag: "System", text: "PDF text parsed. 4 pages loaded, 1,420 words extracted and clean formatting complete." },
+      { step: 1, tag: "PlanningAgent", text: "[STARTED] Extracting course code, module tags and outcomes." },
+      { step: 1, tag: "PlanningAgent", text: "[COMPLETED] Decomposed course structure CSE402. Loaded 5 Outcomes (CO1-CO5)." },
+      { step: 2, tag: "LessonPlanAgent", text: "[STARTED] Mapping topics to a 15-week academic calendar." },
+      { step: 2, tag: "LessonPlanAgent", text: "[COMPLETED] Created lesson plan grid with custom teaching methods." },
+      { step: 3, tag: "AssignmentAgent", text: "[STARTED] Formulating three progressive homework sets." },
+      { step: 3, tag: "AssignmentAgent", text: "[COMPLETED] Mapped assignments for early, mid, and final semesters." },
+      { step: 4, tag: "QuizAgent", text: "[STARTED] Compiling 20 diagnostic MCQs with explanation keys." },
+      { step: 4, tag: "QuizAgent", text: "[COMPLETED] Quiz bank of 20 MCQs completed successfully." },
+      { step: 5, tag: "QuestionPaperAgent", text: "[STARTED] Drafting Mid Semester (50m) and End Semester (100m) exam prompts." },
+      { step: 5, tag: "QuestionPaperAgent", text: "[COMPLETED] Questions parsed. Section A, B, and C divisions map target formats." },
+      { step: 6, tag: "BloomAgent", text: "[STARTED] Classifying syllabus elements into target Bloom taxonomy levels." },
+      { step: 6, tag: "BloomAgent", text: "[COMPLETED] Cognitive distributions assigned: Apply: 30%, Create: 5%, Understand: 30%." },
+      { step: 7, tag: "COMappingAgent", text: "[STARTED] Mapping generated questions to Course Outcomes." },
+      { step: 7, tag: "COMappingAgent", text: "[COMPLETED] Weights mapping completed. Balance check successful." },
+      { step: 8, tag: "ReviewerAgent", text: "[STARTED] Commencing compliance check on generated JSON items." },
+      { step: 8, tag: "ReviewerAgent", text: "[COMPLETED] Review finished. Status: APPROVED." },
+      { step: 9, tag: "AcademicQualityAgent", text: "[STARTED] Calculating overall academic quality score." },
+      { step: 9, tag: "AcademicQualityAgent", text: "[COMPLETED] Quality audit score calculated: 88.5/100. Compliance guidelines met." },
+      { step: 10, tag: "PDFGenerator", text: "[STARTED] Compiling PDF report flowables and page numbers." },
+      { step: 10, tag: "System", text: "[COMPLETED] PDF Report generated: reports/user-1/report_12.pdf. Uploaded to Storage." }
+    ];
+
+    function startSimulation() {
+      document.getElementById('upload-panel').classList.add('hidden');
+      document.getElementById('pipeline-panel').classList.remove('hidden');
+      
+      const term = document.getElementById('terminal');
+      term.innerHTML = ''; // clear
+      
+      let index = 0;
+      
+      function runNextLog() {
+        if (index >= simLogs.length) {
+          // enable results button
+          document.getElementById('btn-results').removeAttribute('disabled');
+          return;
+        }
+        
+        const log = simLogs[index];
+        
+        // Highlight corresponding timeline step
+        highlightTimelineStep(log.step, index);
+        
+        // Append log to terminal
+        const div = document.createElement('div');
+        div.className = "border-b border-white/5 pb-2 animate-fade-in";
+        
+        let color = "text-gray-400";
+        if (log.text.includes("COMPLETED")) color = "text-emerald-400";
+        if (log.text.includes("STARTED")) color = "text-lpu-orange";
+        
+        div.innerHTML = `
+          <div class="flex justify-between text-[9px] text-gray-500 mb-0.5">
+            <span>${log.tag}</span>
+            <span>${new Date().toLocaleTimeString()}</span>
+          </div>
+          <p class="${color}">${log.text}</p>
+        `;
+        term.appendChild(div);
+        term.scrollTop = term.scrollHeight;
+        
+        index++;
+        setTimeout(runNextLog, 600); // speed up simulation (600ms per log)
+      }
+      
+      runNextLog();
+    }
+
+    function highlightTimelineStep(stepId, index) {
+      // Find elements
+      const step = document.getElementById(`step-${stepId}`);
+      const icon = document.getElementById(`icon-${stepId}`);
+      const label = document.getElementById(`label-${stepId}`);
+      
+      if (!step || !icon) return;
+      
+      // Determine if starting or finishing
+      const isStart = simLogs[index].text.includes("STARTED");
+      const isComplete = simLogs[index].text.includes("COMPLETED");
+      
+      if (isStart) {
+        label.className = "font-medium text-lpu-orange font-semibold";
+        icon.className = "absolute -left-[30px] bg-lpu-orange/10 rounded-full p-1 border border-lpu-orange text-lpu-orange animate-pulse";
+        icon.innerHTML = '<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i>';
+      } else if (isComplete || stepId === 0 || stepId === 10) {
+        label.className = "font-medium text-gray-200";
+        icon.className = "absolute -left-[30px] bg-emerald-500/10 rounded-full p-1 border border-emerald-500 text-emerald-500";
+        icon.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i>';
+      }
+      lucide.createIcons();
+    }
+
+    function showResults() {
+      document.getElementById('pipeline-panel').classList.add('hidden');
+      document.getElementById('results-panel').classList.remove('hidden');
+    }
+
+    function switchTab(tabId) {
+      // Hide all contents
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+      // Show chosen
+      document.getElementById(tabId).classList.remove('hidden');
+      
+      // Toggle button highlights
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-lpu-orange', 'text-lpu-orange');
+        btn.classList.add('border-transparent', 'text-gray-400');
+      });
+      event.currentTarget.classList.add('border-lpu-orange', 'text-lpu-orange');
+      event.currentTarget.classList.remove('border-transparent', 'text-gray-400');
+    }
+  </script>
+</body>
+</html>
