@@ -30,3 +30,13 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 settings = Settings()
+
+# Clean DATABASE_URL for compatibility with psycopg2 (strip pgbouncer option)
+if settings.DATABASE_URL:
+    if "?" in settings.DATABASE_URL:
+        base_url, query_str = settings.DATABASE_URL.split("?", 1)
+        params = [p for p in query_str.split("&") if not p.startswith("pgbouncer")]
+        if params:
+            settings.DATABASE_URL = f"{base_url}?{'&'.join(params)}"
+        else:
+            settings.DATABASE_URL = base_url
