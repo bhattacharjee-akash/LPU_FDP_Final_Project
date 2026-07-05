@@ -6,6 +6,15 @@ from app.config import settings
 
 # SQLAlchemy setup
 DATABASE_URL = settings.DATABASE_URL
+if DATABASE_URL and "?" in DATABASE_URL:
+    base_url, query_str = DATABASE_URL.split("?", 1)
+    params = [p for p in query_str.split("&") if not p.startswith("pgbouncer")]
+    if params:
+        DATABASE_URL = f"{base_url}?{'&'.join(params)}"
+    else:
+        DATABASE_URL = base_url
+print(f"Database connection string resolved to: {DATABASE_URL.split('@')[-1] if DATABASE_URL else 'None'}")
+
 engine = None
 
 if not DATABASE_URL or "localhost" in DATABASE_URL or "127.0.0.1" in DATABASE_URL:
