@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 import json
 import datetime
+import io
 
 from app.config import settings
 from app.database import get_db, engine, Base, supabase_client
