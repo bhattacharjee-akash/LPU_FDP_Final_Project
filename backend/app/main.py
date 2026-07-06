@@ -343,20 +343,18 @@ def get_full_compiled_report(syllabus_id: int, db: Session = Depends(get_db), cu
     return report_data
 
 @app.get("/api/download/{syllabus_id}")
-def download_pdf_report(syllabus_id: int, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+def download_pdf_report(syllabus_id: int, db: Session = Depends(get_db)):
     syllabus = crud.get_syllabus(db, syllabus_id)
     if not syllabus:
         raise HTTPException(status_code=404, detail="Syllabus not found.")
-    if syllabus.user_id != current_user["id"]:
-        raise HTTPException(status_code=403, detail="Unauthorized access.")
         
     # Get details
     report = crud.get_full_report(db, syllabus_id)
     if not report or not report.get("lesson_plan"):
         raise HTTPException(status_code=400, detail="Report generation has not completed yet.")
         
-    # Fetch profile
-    profile = crud.get_profile(db, current_user["id"])
+    # Fetch profile based on syllabus owner
+    profile = crud.get_profile(db, syllabus.user_id)
     faculty_name = profile.name if profile else "Faculty Coordinator"
     dept_name = profile.department if profile else "Academic Department"
     
