@@ -184,6 +184,7 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
                 print(f"Supabase PDF upload error: {str(e)}. Using fallback download route.")
 
         crud.create_pdf_report(db, syllabus_id, file_path, file_url)
+        crud.create_log(db, syllabus_id, "PDFGenerator", "COMPLETED", "Course Pack PDF compiled successfully.")
         crud.create_log(db, syllabus_id, "System", "COMPLETED", "All agents completed execution successfully. Course Pack is ready!")
         crud.update_history_status(db, syllabus_id, "COMPLETED")
 
