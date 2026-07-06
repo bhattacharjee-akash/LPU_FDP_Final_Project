@@ -1,91 +1,56 @@
-# LPU Academic Copilot — Deployment Guide
+# Production Deployment Guide
+> **LPU Academic Copilot — Steps to Deploy Next.js on Vercel and FastAPI on Render**
 
-This guide describes how to deploy the decoupled Next.js 15 frontend on Vercel and the FastAPI backend on Render.
-
----
-
-## 1. Prerequisites
-Ensure you have the following credentials:
-1. **GitHub account** containing the pushed project code.
-2. **Render account** (for FastAPI backend).
-3. **Vercel account** (for Next.js frontend).
-4. **Supabase project** (for PostgreSQL database, Auth, and Storage).
+This document provides instructions for setting up the production environment on **Vercel** and **Render** linked to your GitHub repository **LPU_FDP_Final_Project**.
 
 ---
 
-## 2. Supabase Configuration (Cloud Database)
+## 1. Backend Deployment (Render)
 
-### 2.1. SQL Database Setup
-1. Log in to the [Supabase Console](https://supabase.com).
-2. Create a new project.
-3. Open the **SQL Editor** in the left menu.
-4. Copy the complete SQL commands from [`schema.sql`](file:///C:/Users/AKASH%20PC/lpu-academic-copilot/schema.sql) in the project root.
-5. Click **Run** to create the tables and set up Row Level Security (RLS) policies.
+We use Render's **Blueprints** feature to deploy the backend automatically using configuration files.
 
-### 2.2. Supabase Storage Setup
-1. Navigate to **Storage** in the left menu.
-2. Create two new buckets:
-   - Name: `syllabi` (Set access to Public/Private based on your security preferences).
-   - Name: `reports` (Set access to Public/Private based on preferences).
+### **Step A: Setup using Blueprint Button**
+Click this deployment link:
+👉 **[Deploy Backend on Render](https://render.com/deploy?repo=https://github.com/bhattacharjee-akash/LPU_FDP_Final_Project)**
 
----
+*Render will automatically read the `render.yaml` at the root of the project, configure Python environments, build scripts, start-up commands, and ports.*
 
-## 3. Backend Deployment on Render
-
-### 3.1. Render Setup
-1. Log in to [Render Dashboard](https://render.com).
-2. Click **New +** and select **Web Service**.
-3. Link your GitHub repository.
-4. Set the following properties:
-   - **Name**: `lpu-academic-copilot-backend`
-   - **Environment**: `Python`
-   - **Build Command**: `pip install -r requirements.txt && alembic upgrade head`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-   - **Region**: Select a region close to your target audience.
-
-### 3.2. Render Environment Variables
-Add the following key-value pairs in the **Environment** tab:
-```env
-PORT=8000
-DATABASE_URL=your-supabase-connection-string (Transaction Pooler or Session Pooler URI)
-SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=your-supabase-anon-public-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-GEMINI_API_KEY=your-google-gemini-api-key
-GROQ_API_KEY=your-groq-api-key (Optional)
-FRONTEND_URL=https://your-frontend-domain.vercel.app
-```
+### **Step B: Add Environment Variables in Render**
+Ensure you fill in these keys under the environment variables prompt:
+* `DATABASE_URL`: Your Supabase **Connection Pooler URI** (Port `6543`).
+* `SUPABASE_URL`: Your Supabase Project URL.
+* `SUPABASE_ANON_KEY`: Your Supabase public anonymous key.
+* `SUPABASE_SERVICE_ROLE_KEY`: Your Supabase service role secret key.
+* `GEMINI_API_KEY`: YOUR_GEMINI_API_KEY
+* `FRONTEND_URL`: `https://frontend-five-gules-38.vercel.app`
 
 ---
 
-## 4. Frontend Deployment on Vercel
+## 2. Frontend Deployment (Vercel)
 
-### 4.1. Vercel Setup
-1. Log in to the [Vercel Dashboard](https://vercel.com).
-2. Click **Add New** and select **Project**.
-3. Import your GitHub repository.
-4. Set the following properties:
-   - **Framework Preset**: `Next.js`
-   - **Root Directory**: `frontend`
+Vercel hosts the Next.js app.
 
-### 4.2. Vercel Environment Variables
-Add the following variables before clicking **Deploy**:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-public-key
-NEXT_PUBLIC_BACKEND_URL=https://lpu-academic-copilot-backend.onrender.com
-```
+### **Step A: Link Project in Vercel**
+1. Log in to Vercel and connect your GitHub account.
+2. Select **"Import Project"** and choose your repository: **`LPU_FDP_Final_Project`**.
+3. Choose the **Root Directory** as **`frontend`** (Next.js is inside this subdirectory).
+4. Set the Framework Preset as **Next.js**.
+
+### **Step B: Add Environment Variables in Vercel**
+Add these three environment variables:
+1. **`NEXT_PUBLIC_BACKEND_URL`**: `https://lpu-academic-copilot-backend.onrender.com`
+2. **`NEXT_PUBLIC_SUPABASE_URL`**: `https://iqytwvoyignnohsyhhdn.supabase.co`
+3. **`NEXT_PUBLIC_SUPABASE_ANON_KEY`**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
+
+### **Step C: Deploy**
+Click **"Deploy"**. Vercel will build and deploy the Next.js app to production, linking it automatically to the Render backend and Supabase Auth.
 
 ---
 
-## 5. Troubleshooting Guidelines
-
-### 5.1. CORS Issues
-If you encounter `CORS preflight request blocked` errors in your browser console:
-- Ensure the `FRONTEND_URL` on Render matches your Vercel deployment URL exactly (with no trailing slash).
-- If you're testing locally, ensure the `FRONTEND_URL` is set to `http://localhost:3000`.
-
-### 5.2. Database Connection Timeouts
-If the backend fails to start or times out:
-- Double check that your `DATABASE_URL` is correct.
-- If using Supabase, prefer the **Session Pooler** port (typically `5432` or transaction pooler `6543`) over direct connection, as cloud services can run out of connections.
+## 3. Post-Deployment Verification
+- Open the backend liveness check in your browser:  
+  `https://lpu-academic-copilot-backend.onrender.com/api/debug-logs`  
+  It should return `{"logs":[],"histories":[]}` with a `200 OK` status, showing the database is connected.
+- Open the Vercel site:  
+  `https://frontend-five-gules-38.vercel.app`  
+  Register a user, upload a syllabus, and ensure the multi-agent timeline successfully processes and lets you download the compiled Course Pack.
