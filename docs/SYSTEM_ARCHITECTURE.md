@@ -1,341 +1,105 @@
-# System Architecture & Diagrams Documentation
-> **LPU HRDC Nexus — Enterprise Platform Blueprint & Diagrams**
+# System Architecture
+> **LPU Academic Copilot — Platform System Architecture & Data Flows**
 
-LPU HRDC Nexus is an enterprise-grade Progressive Web App (PWA) designed to manage the end-to-end lifecycle of training programmes. It integrates Next.js 15, FastAPI, Supabase, Groq APIs, and a LangGraph AI reasoning workflow backed by pgvector RAG.
-
----
-
-## 1. System Architecture Diagram
-The high-level architecture decouples presentation, application logic, database storage, and AI reasoning.
-
-```mermaid
-graph TB
-    subgraph Presentation Layer (PWA Client)
-        FE[Next.js 15 Frontend / React 19] -->|Install stand-alone app| PWA[Installable Mobile/Desktop Client]
-        FE -->|JWT Bearer Token| API_Gateway[FastAPI Endpoints]
-    end
-
-    subgraph Application Layer (FastAPI Backend)
-        API_Gateway --> Auth_Dep[Auth Dependency / JWT Validation]
-        API_Gateway --> CRUD_Svc[CRUD Service Core]
-        API_Gateway --> Agent_Svc[LangGraph AI Orchestrator]
-    end
-
-    subgraph Storage & External Services
-        Auth_Dep -->|Validate token| Supa_Auth[Supabase Auth]
-        CRUD_Svc -->|SQLAlchemy Core / SQLite Fallback| Postgres[(Supabase PostgreSQL)]
-        CRUD_Svc -->|Binary file upload| Storage[(Supabase Storage)]
-        Agent_Svc -->|Embeddings RAG queries| pgvector[(pgvector Index)]
-        Agent_Svc -->|LLM Completion| Groq[Groq Cloud LLM API]
-    end
-```
+The LPU Academic Copilot is a full-stack, decupled multi-agent AI system designed to automate academic syllabus parsing, lesson planning, assignment synthesis, quiz generation, cognitive mapping (Bloom's Taxonomy), course outcome alignment, quality reviewing, and PDF generation.
 
 ---
 
-## 2. Component Diagram
-Shows how different structural modules in the system interact.
+## 1. High-Level Design Architecture
 
-```mermaid
-graph LR
-    subgraph UI Components
-        Dashboard[Overview Dashboard]
-        ProgPortal[Programmes Portal]
-        AttHub[Attendance Hub]
-        AssessClient[Assessments Client]
-        FeedbackROI[Feedback & ROI surveys]
-        AIChat[AI Knowledge Chat]
-    end
-
-    subgraph Backend Routers
-        AuthRouter[Auth Router]
-        ProgRouter[Programmes Router]
-        AttRouter[Attendance Router]
-        AssessRouter[Assessments Router]
-        CertRouter[Certificates Router]
-        AIRouter[AI Assistant Router]
-    end
-
-    Dashboard --> ProgRouter
-    ProgPortal --> ProgRouter
-    AttHub --> AttRouter
-    AssessClient --> AssessRouter
-    FeedbackROI --> ProgRouter
-    AIChat --> AIRouter
-```
-
----
-
-## 3. Database Entity-Relationship (ER) Diagram
-Shows the complete PostgreSQL database structure for LPU HRDC Nexus.
-
-```mermaid
-erDiagram
-    users ||--o| profiles : "has one profile"
-    users ||--o| application_settings : "has application setting"
-    users ||--o| materials : "uploads many materials"
-    users ||--o| attendance : "marks many attendances"
-    users ||--o| assessment_submissions : "submits assessments"
-    users ||--o| project_submissions : "submits projects"
-    users ||--o| feedbacks : "writes feedbacks"
-    users ||--o| certificates : "earns certificates"
-
-    programmes ||--o{ sessions : "contains many sessions"
-    programmes ||--o{ programme_trainers : "has many trainers"
-    programmes ||--o{ programme_participants : "has many participants"
-    programmes ||--o{ materials : "houses materials"
-    programmes ||--o{ assessments : "houses assessments"
-    programmes ||--o{ project_submissions : "houses projects"
-    programmes ||--o{ feedbacks : "receives feedbacks"
-    programmes ||--o{ certificates : "issues certificates"
-
-    sessions ||--o{ attendance : "logs attendance"
-    sessions ||--o{ materials : "references files"
-    sessions ||--o{ assessments : "references quizzes"
-
-    materials ||--o{ document_embeddings : "yields vector chunks"
-
-    corporate_clients ||--o{ corporate_contracts : "signs contracts"
-    programmes ||--o{ corporate_contracts : "satisfies contract"
-
-    users {
-        string id PK
-        string email
-        timestamp created_at
-    }
-    profiles {
-        int id PK
-        string user_id FK
-        string name
-        string role
-        string department
-        string phone
-        string designation
-    }
-    programmes {
-        int id PK
-        string title
-        text description
-        string category
-        string mode
-        string venue
-        string coordinator_id FK
-        timestamp start_date
-        timestamp end_date
-        int max_capacity
-        string status
-    }
-    sessions {
-        int id PK
-        int programme_id FK
-        int session_number
-        string title
-        date date
-        string start_time
-        string end_time
-        string venue
-        string trainer_id FK
-        string attendance_qr_code
-        timestamp attendance_window_start
-        timestamp attendance_window_end
-        boolean gps_verification
-        float gps_lat
-        float gps_lng
-        float gps_radius_meters
-    }
-    attendance {
-        int id PK
-        int session_id FK
-        string participant_id FK
-        string status
-        timestamp timestamp
-        float gps_lat
-        float gps_lng
-        boolean verified_by_gps
-        boolean verified_by_qr
-        boolean manual_override
-        string overridden_by FK
-        text notes
-    }
-    materials {
-        int id PK
-        string title
-        string file_path
-        string file_url
-        string file_type
-        int programme_id FK
-        int session_id FK
-        string uploaded_by FK
-        boolean is_indexed
-    }
-    document_embeddings {
-        int id PK
-        int material_id FK
-        string filename
-        text text_chunk
-        vector embedding
-    }
-    corporate_contracts {
-        int id PK
-        int client_id FK
-        int programme_id FK
-        string invoice_number
-        float invoice_amount
-        string invoice_status
-    }
-```
-
----
-
-## 4. Deployment Diagram
-LPU HRDC Nexus is a cloud-native platform utilizing Render, Vercel, and Supabase.
+The application is structured into three main layers:
+1. **Frontend Presentation Layer**: Built with **Next.js 15 (App Router)** and React 19 to provide a rich visual workspace for faculty.
+2. **Backend Services Layer**: Built with **FastAPI** (Python 3.12/3.14) to run asynchronous agent workflows, handle file parsing, and serve RESTful APIs.
+3. **Storage & Authentication Layer**: Powered by **Supabase (PostgreSQL & Object Storage)** to manage authentication, application logs, generation histories, and compiled PDF reports.
 
 ```mermaid
 graph TD
-    Client([Browser / Mobile PWA]) -->|HTTPS| Vercel[Vercel Serverless Hosting]
-    Vercel -->|Serves Static Files| HTML[HTML/JS/PWA assets]
+    User([Faculty Client]) -->|Upload PDF & Authenticate| FE[Next.js 15 Frontend]
+    FE -->|API Requests with JWT| BE[FastAPI Backend]
     
-    Client -->|REST Requests| Render[Render Web Service]
-    Render -->|Runs Docker Container| FastAPI[FastAPI Backend / Python 3.12]
-    
-    FastAPI -->|JWT verification| Supa_Auth[Supabase Auth]
-    FastAPI -->|pgvector Query| Supa_DB[Supabase Postgres Instance]
-    FastAPI -->|File Storage| Supa_S3[Supabase Object Buckets]
-    FastAPI -->|Token requests| Groq_Cloud[Groq LLM Engine API]
+    subgraph Storage & Cloud APIs
+        BE -->|User Session Verification| Auth[Supabase Auth]
+        BE -->|Postgres DB Operations| DB[(Supabase PostgreSQL)]
+        BE -->|Store Generated PDFs| Store[(Supabase Object Storage)]
+        BE -->|Collaborative Agent Inference| LLM[Google Gemini API]
+    end
 ```
 
 ---
 
-## 5. Sequence Diagram
-Shows the sequence of logging geofenced and QR-validated classroom attendance.
+## 2. Multi-Agent Orchestration Workflow
+
+When a syllabus is uploaded, a background task triggers the **Multi-Agent Orchestrator**. The orchestrator manages the lifecycle, execution order, context passing, and fallback mechanisms for **10 specialized nodes**:
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Participant as User Participant
-    participant App as Next.js Client
-    participant API as FastAPI Backend
-    participant DB as Postgres Database
-
-    Participant->>App: Scan classroom QR & request check-in
-    App->>App: Acquire Geolocation coordinates (navigator.geolocation)
-    App->>API: POST /api/sessions/{id}/attendance (QR code, lat, lng)
-    API->>DB: Fetch session attendance parameters (lat, lng, radius, QR hash, window)
-    DB-->>API: Session configuration details
-    API->>API: Verify scan time is within window
-    API->>API: Verify QR code matches hash
-    API->>API: Calculate distance between user coordinates & classroom center
-    alt Validation Passed
-        API->>DB: Save Attendance log (Present/Late)
-        DB-->>API: Success
-        API-->>App: Return 200 (Attendance marked)
-        App-->>Participant: Present indicator marked successfully!
-    else Validation Failed
-        API-->>App: Return 400 (Verification Error)
-        App-->>Participant: Display Out-Of-Boundary/Expired Error
+    actor Faculty as Faculty User
+    participant Upload as /api/upload
+    participant System as System Logger
+    participant Parser as PDF Parser
+    participant Orchestrator as Multi-Agent Orchestrator
+    participant Gemini as Gemini 1.5 Flash
+    participant DB as Supabase DB
+    
+    Faculty->>Upload: Uploads Syllabus PDF
+    Upload->>Parser: Extract text from PDF
+    Parser-->>Upload: raw text
+    Upload->>DB: Save Syllabus Row (PENDING)
+    Upload->>Orchestrator: Dispatch background task
+    Upload-->>Faculty: Return 200 (PROCESSING)
+    
+    Note over Orchestrator: Phase 1: Planning Node
+    Orchestrator->>Gemini: PlanningAgent (Syllabus text)
+    Gemini-->>Orchestrator: Extracted Structure (JSON)
+    Orchestrator->>DB: Log Planning COMPLETED
+    
+    Note over Orchestrator: Phase 2: Content Generation (Parallelizable)
+    rect rgb(20, 20, 20)
+        par Planning Data to Lesson Planner
+            Orchestrator->>Gemini: LessonPlanAgent
+            Gemini-->>Orchestrator: 15-Week Plan
+        and Planning Data to Assignment Creator
+            Orchestrator->>Gemini: AssignmentAgent
+            Gemini-->>Orchestrator: 3 Assignments
+        and Planning Data to Quiz Bank Generator
+            Orchestrator->>Gemini: QuizAgent
+            Gemini-->>Orchestrator: 20 MCQs
+        and Planning Data to Question Paper Creator
+            Orchestrator->>Gemini: QuestionPaperAgent
+            Gemini-->>Orchestrator: Mid/End-Sem Papers
+        and Planning Data to Bloom Taxonomy Evaluator
+            Orchestrator->>Gemini: BloomAgent
+            Gemini-->>Orchestrator: Cognitive Map
+        end
     end
+    
+    Note over Orchestrator: Phase 3: Alignment & Quality Review
+    Orchestrator->>Gemini: COMappingAgent (Questions + Outcomes)
+    Gemini-->>Orchestrator: Mapping Table
+    Orchestrator->>Gemini: ReviewerAgent (Consistency check)
+    Gemini-->>Orchestrator: Approved/Changes
+    Orchestrator->>Gemini: AcademicQualityAgent (Score & suggestions)
+    Gemini-->>Orchestrator: Quality Metrics (JSON)
+    
+    Note over Orchestrator: Phase 4: Compilation
+    Orchestrator->>Orchestrator: PDFGenerator (Compile report)
+    Orchestrator->>DB: Save PDF URL and COMPLETED status
+    System-->>Faculty: Status loop returns COMPLETED
 ```
 
 ---
 
-## 6. Class Diagram
-Represents the key object schemas inside the FastAPI app.
+## 3. Data Integration Details
 
-```mermaid
-classDiagram
-    class User {
-        +id: String
-        +email: String
-        +created_at: DateTime
-        +get_profile() Profile
-    }
-    class Profile {
-        +id: Integer
-        +user_id: String
-        +name: String
-        +role: String
-        +department: String
-        +phone: String
-    }
-    class Programme {
-        +id: Integer
-        +title: String
-        +category: String
-        +mode: String
-        +start_date: DateTime
-        +status: String
-        +sessions: List[Session]
-    }
-    class Session {
-        +id: Integer
-        +programme_id: Integer
-        +session_number: Integer
-        +title: String
-        +attendance_qr_code: String
-        +gps_verification: Boolean
-        +gps_lat: Float
-        +gps_lng: Float
-        +gps_radius_meters: Float
-        +verify_geofence(lat, lng): Boolean
-    }
-    class Attendance {
-        +id: Integer
-        +session_id: Integer
-        +participant_id: String
-        +status: String
-        +verified_by_gps: Boolean
-        +verified_by_qr: Boolean
-    }
+### A. Authentication flow
+1. User logs in on the Next.js frontend using Supabase Auth.
+2. Next.js retrieves the **JWT access token** from the session.
+3. Every subsequent HTTP request to Render includes the token in the `Authorization: Bearer <TOKEN>` header.
+4. FastAPI's `get_current_user` dependency decodes the JWT using the public Supabase key to verify user identities.
 
-    User "1" *-- "1" Profile
-    Programme "1" *-- "many" Session
-    Session "1" *-- "many" Attendance
-```
+### B. CORS Configuration
+CORS policies are configured to explicitly allow traffic from the Vercel production domain (`https://frontend-five-gules-38.vercel.app`) as well as local development environments, preventing pre-flight request blocks.
 
----
-
-## 7. LangGraph Workflow Diagram
-Defines the multi-agent reasoning flow executed during AI Knowledge Assistant queries.
-
-```mermaid
-graph TD
-    Query([User Query]) --> Classify[Intent Classification Agent]
-    Classify --> Router[Router Agent]
-    
-    Router -->|ATTENDANCE| AttAgent[Attendance Agent]
-    Router -->|PROGRAMME| ProgAgent[Programme Retrieval Agent]
-    Router -->|DOCUMENT| DocAgent[Document Retrieval Agent / RAG]
-    Router -->|ANALYTICS| AnalAgent[Analytics Agent]
-    Router -->|REPORT| RepAgent[Report Generation Agent]
-    
-    AttAgent --> Validate[Response Validation Agent]
-    ProgAgent --> Validate
-    DocAgent --> Validate
-    AnalAgent --> Validate
-    RepAgent --> Validate
-    
-    Validate --> LLM[Groq LLM Engine / llama3-8b]
-    LLM --> FinalResponse([Final Cited Response])
-```
-
----
-
-## 8. RAG Architecture Diagram
-Defines how documents (PDFs, PPTs, DOCXs) are chunked, embedded, stored, and queried.
-
-```mermaid
-graph TD
-    subgraph Ingestion Pipeline (Background Task)
-        Doc[Uploaded PDF/PPT/Word File] --> Parser[PDFParser / Text Extractor]
-        Parser --> Chunker[Chunker: 600 words + 150 overlap]
-        Chunker --> Embedder[Offline ADA-002 Embedder Simulator]
-        Embedder --> DB_Insert[Save Chunk & Embedding into public.document_embeddings]
-    end
-
-    subgraph Retrieval Pipeline (LangGraph Workflow)
-        Query[User Chat Query] --> QueryEmbed[Embed Query Text]
-        QueryEmbed --> VectorSearch[Cosine Similarity Search using pgvector hnsw]
-        DB_Insert -->|Seed embeddings| pgvector[(Supabase pgvector Index)]
-        pgvector -->|Return top 4 matched chunks| VectorSearch
-        VectorSearch --> LLMContext[Compile into LLM system context]
-    end
-```
+### C. Database Connection Pooler
+Outbound network requests from Render (which uses IPv4) connect to Supabase through the **Transaction Pooler** (port `6543`) resolving to an IPv4 host, bypassing IPv6-only direct connection issues.

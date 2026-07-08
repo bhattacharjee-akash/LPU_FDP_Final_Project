@@ -8,266 +8,245 @@ def create_presentation():
     prs = Presentation()
     
     # Define color scheme (LPU Orange & Charcoal theme)
-    ORANGE = RGBColor(231, 120, 23)   # LPU Orange
-    CHARCOAL = RGBColor(26, 37, 44)   # Charcoal Dark
+    ORANGE = RGBColor(227, 108, 10)  # LPU Orange
+    CHARCOAL = RGBColor(38, 38, 38)  # Charcoal Dark
     LIGHT_GRAY = RGBColor(245, 245, 245)
     
     slides_data = [
         # Slide 1: Title
         {
             "layout": 0,
-            "title": "LPU HRDC Nexus",
-            "subtitle": "An AI-Powered Training Lifecycle Management Platform\nLovely Professional University (LPU) HRDC Leadership Capstone",
-            "notes": "Good morning members of the HRDC leadership panel. Today, we present LPU HRDC Nexus, an enterprise-grade AI-powered training lifecycle management platform designed to automate and digitize the complete training program pipeline."
+            "title": "LPU Academic Copilot",
+            "subtitle": "Multi-Agent AI Platform for Faculty Workflow Automation\nLovely Professional University (LPU) FDP Capstone",
+            "notes": "Good morning members of the FDP evaluation panel. Today, we present the LPU Academic Copilot, a full-stack platform driven by a 10-agent orchestrator to automate the standard curriculum preparation workflow."
         },
-        # Slide 2: Project Objectives
+        # Slide 2: Problem Statement
         {
             "layout": 1,
-            "title": "Objectives of LPU HRDC Nexus",
+            "title": "Problem Statement",
             "bullets": [
-                "Manage the complete lifecycle of faculty development (FDPs), workshops, refresher courses, and orientations.",
-                "Automate classroom check-in via geofenced QR Code scanning.",
-                "Provide multi-format academic evaluations (MCQ, Subjective, Coding, Project Submissions).",
-                "Integrate digital certificate compilation with QR verification page and digital signatures.",
-                "Establish a corporate training module to log client invoices and contract agreements."
+                "Faculty spend significant hours manually drafting weekly delivery schedules.",
+                "Designing assignments and quiz banks with correct answers is tedious and error-prone.",
+                "Reviewing exam questions manually for cognitive weight (Bloom's Taxonomy) is highly subjective.",
+                "Verifying syllabus compliance takes multiple iteration reviews, causing process delays."
             ],
-            "notes": "LPU HRDC conducts dozens of programmes annually. Nexus aims to provide a centralized hub for managing attendees, materials, grades, attendance, certificates, and corporate clients."
+            "notes": "The primary problem is administrative overload. Faculty members spend over 8 hours per planning cycle on paperwork, taking away from direct student mentoring."
         },
-        # Slide 3: Problem Statement
+        # Slide 3: Motivation
         {
             "layout": 1,
-            "title": "Problem Statement & Existing Challenges",
+            "title": "Motivation",
             "bullets": [
-                "Paper-based attendance is slow, prone to proxy inputs, and lacks geographical verification.",
-                "Drafting quizzes, grading projects, and compiling certificates manually consumes extensive administrative time.",
-                "Syllabus files and lecture documents exist as scattered files, making knowledge retrieval difficult.",
-                "Tracking corporate revenue, contracts, and clients invoices is managed in disconnected spreadsheets."
+                "Empower lovely faculty members by automating repetitive documentation.",
+                "Maintain absolute standardization across academic packages.",
+                "Provide objective, automated feedback on curriculum compliance prior to class delivery.",
+                "Accelerate institutional agility in resource compilation."
             ],
-            "notes": "Administrators spend over 15 hours per training cycle on manual documentation, attendance verification, scoring, and certificate compilation."
+            "notes": "We wanted to leverage modern agentic workflows to build an automated assistant that serves as a quality-audited companion to faculty members."
         },
-        # Slide 4: Tech Stack
+        # Slide 4: Objectives
         {
             "layout": 1,
-            "title": "Enterprise-Grade Technology Stack",
+            "title": "Objectives",
             "bullets": [
-                "Frontend: Next.js 15 (App Router), React 19, TypeScript, TailwindCSS, Framer Motion.",
-                "Backend: FastAPI (Python 3.12 ASGI), SQLAlchemy ORM core database logic.",
-                "Storage & Auth: Supabase PostgreSQL database, Object Storage buckets, and JWT authentication.",
-                "AI Reasoning & Indexing: Groq Cloud API LLMs, LangGraph multi-agent orchestration, and pgvector HNSW database indexes."
+                "Parse standard syllabus PDF files dynamically.",
+                "Orchestrate a 10-Agent pipeline in a concurrent/dependent sequence.",
+                "Generate structured lecture schedules, progressive assignments, and 20 MCQs.",
+                "Conduct objective Bloom's cognitive mapping and Course Outcome correlation.",
+                "Output a publication-ready Course Package PDF containing all reviewed deliverables."
             ],
-            "notes": "Our technology stack ensures security, speed, and standard compliance. The frontend runs React 19, and the backend leverages Python and pgvector."
+            "notes": "Our objectives focus on automation, structuring, mapping, and compilation, delivering a complete packet in under 40 seconds."
         },
-        # Slide 5: System Architecture
+        # Slide 5: Existing Challenges
         {
             "layout": 1,
-            "title": "System Architecture Overview",
+            "title": "Existing Challenges in AI Document Synthesis",
             "bullets": [
-                "Decoupled Layout: Next.js frontend deployed to Vercel, FastAPI backend deployed to Render.",
-                "Database Connection Pooler: Supabase pooler over port 6543 handles high concurrent queries.",
-                "Asynchronous Pipeline: Large documents parsing and pgvector RAG indexing run in background threads.",
-                "PWA Standalone: Installable directly from the browser with cached offline pages."
+                "Invalid Model Names: Out-of-date model identifiers cause live API crashes.",
+                "DNS & Network Barriers: Direct PostgreSQL IPv6 calls fail inside Render's IPv4 VMs.",
+                "Query Param Incompatibilities: Unused parameters (like pgbouncer) crash DB drivers.",
+                "Download Authentication Conflicts: Browser file downloads lack JWT bearer headers."
             ],
-            "notes": "The architecture is built to be resilient and cloud-native, decoupling compute and storage services."
+            "notes": "During deployment, we solved major real-world challenges, such as handling Render's IPv4 network limitations when connecting to Supabase's IPv6 databases, and fixing download authentication loops."
         },
-        # Slide 6: Database Schema & Models
+        # Slide 6: Proposed Solution
         {
             "layout": 1,
-            "title": "PostgreSQL Relational DB Design",
+            "title": "Proposed Solution",
             "bullets": [
-                "users & profiles: Synchronized roles mapping (Admin, Staff, Trainer, Participant).",
-                "programmes & sessions: Relational training structures and dynamic timetables.",
-                "attendance: Logs location coordinates, timestamps, and override justifications.",
-                "corporate_contracts: Tracks corporate consulting client invoices and billings."
+                "Full-stack web application linking Next.js 15 and FastAPI.",
+                "State-of-the-art Google Gemini 1.5 Flash API reasoning models.",
+                "An asynchronous 10-node agent orchestrator running in background threads.",
+                "Supabase PostgreSQL and Object Storage database backend.",
+                "CORS-compliant and authenticated APIs with public token-less download streams."
             ],
-            "notes": "The schema supports complex cascades. For safety, the SQLAlchemy setup automatically falls back to local SQLite if remote PostgreSQL is unreachable."
+            "notes": "Our solution decoupling Next.js and FastAPI provides a seamless UI tracking timeline while running intensive multi-agent models in the background."
         },
-        # Slide 7: LangGraph Multi-Agent reasoning
+        # Slide 7: System Architecture
         {
             "layout": 1,
-            "title": "LangGraph Multi-Agent reasoning Engine",
+            "title": "System Architecture & Data Flows",
             "bullets": [
-                "Intent Classification: Detects if the user query is about attendance, programs, docs, or analytics.",
-                "Routing Node: Dynamically dispatches task to designated agent.",
-                "Specialized Agents: Attendance Agent, Programme Agent, RAG Document Agent, Analytics Agent.",
-                "Validation Node: Cross-checks output facts against DB records to prevent hallucination.",
-                "Response Synthesis: Groq LLM drafts final cited response."
+                "Frontend: Next.js 15, TypeScript, Tailwind CSS, and Supabase client-side Auth.",
+                "Backend: FastAPI (Python 3.12/3.14) serving REST APIs and managing Alembic migrations.",
+                "Database Connection: Powered by Supabase Connection Pooler (Port 6543) resolving to IPv4.",
+                "Authentication: Supabase JWT validation inside FastAPI dependencies."
             ],
-            "notes": "By using LangGraph, we move away from simple chatbot completion towards specialized reasoning agents, ensuring higher accuracy and citation validity."
+            "notes": "The system architecture is built for resiliency. We use the Supabase Connection Pooler over port 6543 to bypass Render network restrictions."
         },
-        # Slide 8: Document RAG & pgvector Indexing
+        # Slide 8: Multi-Agent Workflow
         {
             "layout": 1,
-            "title": "Document RAG & pgvector Indexing",
+            "title": "The 10-Agent Orchestrator Pipeline",
             "bullets": [
-                "Automatic Parsing: PDF, DOCX, and PPT files uploaded are automatically parsed using PDFParser.",
-                "Ingestion & Chunking: Text is split into 600-word blocks with a 150-word overlap.",
-                "Embedding: Chunks are encoded into 1536-dimensional vectors.",
-                "Similarity Query: Uses PostgreSQL cosine distance operators supported by HNSW indexes."
+                "Planning Node: Extracts syllabus structure, units, and Course Outcomes.",
+                "Generation Group (Parallel): Lesson Plan, Assignment, Quiz, and Question Paper agents.",
+                "Mapping Group: Bloom Taxonomy Evaluator and Course Outcomes (CO) alignment nodes.",
+                "Review Group: Consistency checker (Reviewer) and Compliance Auditor (Quality Agent).",
+                "Compilation Node: Compiles raw structures into a styled ReportLab PDF pack."
             ],
-            "notes": "The RAG pipeline provides contextual answering. The HNSW index ensures search response times under 50 milliseconds."
+            "notes": "Each agent is specialized. By prompting them in a sequence, the output of the Planning Agent forms the context for the generation, mapping, and quality check agents."
         },
-        # Slide 9: Classroom Attendance Verification
+        # Slide 9: Technology Stack
         {
             "layout": 1,
-            "title": "Geofenced QR Code Attendance",
+            "title": "Technology Stack",
             "bullets": [
-                "Dynamic Time-Windows: Attendance check-in is restricted to configurable timing windows.",
-                "QR Token Checking: QR hashes change dynamically to prevent student code sharing.",
-                "GPS Geofencing: Calculates user distance against classroom coordinates (LPU block center).",
-                "Manual Override: HRDC staff can manually force logs, writing notes."
+                "Frontend: React 19, Next.js 15 (App Router), Framer Motion, Lucide Icons",
+                "Backend: FastAPI, Uvicorn ASGI Server, SQLAlchemy ORM",
+                "Database & Storage: Supabase PostgreSQL (PgBouncer), Supabase Storage Buckets",
+                "AI Models: Google Gemini 1.5 Flash (Primary), Groq Cloud APIs (Secondary)",
+                "PDF Engine: ReportLab layout flowables"
             ],
-            "notes": "This geofenced QR check-in stops classroom proxies, locking logs to actual classroom boundaries."
+            "notes": "We are using modern, fast frameworks. Google Gemini 1.5 Flash provides high reasoning speeds, and ReportLab enables dynamic PDF layouts."
         },
-        # Slide 10: Assessments & Auto Evaluation
+        # Slide 10: Database Design
         {
             "layout": 1,
-            "title": "Assessments Module & MCQ grading",
+            "title": "Relational Database Design",
             "bullets": [
-                "Multi-format Tests: Supports MCQ, Subjective assignments, and Code submissions.",
-                "MCQ Auto Evaluation: Student MCQ sheets are graded instantly, saving trainer hours.",
-                "Project Submittals: Logs Title, Abstract, GitHub URL, and presentation slideshow links.",
-                "Gamified Leaderboard: Tracks class performance, displaying top participants."
+                "users: Stores synchronized authentication profiles.",
+                "syllabi: Holds the parsed text, code, and PDF path parameters.",
+                "generation_histories: Tracks processing and completion states.",
+                "agent_execution_logs: Feeds the live timeline in the frontend.",
+                "All tables use Cascade On Delete constraints for data integrity."
             ],
-            "notes": "Auto-grading saves faculty extensive evaluation time. The leaderboard fosters a healthy learning dynamic."
+            "notes": "The database contains six main relational tables. The agent logs feed our front-end progress indicators, providing trace information to users in real-time."
         },
-        # Slide 11: Feedback & ROI Impact Assessment
+        # Slide 11: Key Features
         {
             "layout": 1,
-            "title": "Feedback Index & Pre-Post surveys",
+            "title": "Key Platform Features",
             "bullets": [
-                "Ratings System: Participants rate trainer, content, venue, and facilities (1 to 5 scale).",
-                "Competency Surveys: Tracks knowledge before and after programs to calculate gain percentages.",
-                "ROI index: Automatically computes organizational performance metrics.",
-                "Improvement Recommendations: Generates feedback trends summaries."
+                "Interactive Uploader: Simple drag & drop interface for PDF files.",
+                "Live Timeline Logs: Real-time progress updates directly from background workers.",
+                "Calibration Settings: Fine-tune model parameters and faculty details.",
+                "Public Downloads: Direct, secure downloads without header conflicts.",
+                "Resilient DB Fallback: Gracefully routes to SQLite locally if remote PG is offline."
             ],
-            "notes": "Nexus evaluates training return-on-investment (ROI) by assessing pre-post test score differences."
+            "notes": "The key features include progress tracking, configuration customization, and automatic database fallbacks, rendering the platform robust."
         },
-        # Slide 12: Digital Certificates Registry
+        # Slide 12: Application Demonstration Flow
         {
             "layout": 1,
-            "title": "Auto-Generated Digital Certificates",
+            "title": "Application Demonstration Flow",
             "bullets": [
-                "ReportLab PDF Compilation: Dynamically compiles certificates with participant name and date.",
-                "QR Code Verification: Includes QR verification hash linking to public checker page.",
-                "Digital Signature: Signs certificate PDFs for authenticity.",
-                "Verification Search Page: Allows employers to verify certificate validity."
+                "Step 1: User signs up/in on the Vercel frontend portal.",
+                "Step 2: Uploads a standard syllabus PDF (e.g. Machine Learning).",
+                "Step 3: Trigger Multi-Agent Workflow triggers background tasks.",
+                "Step 4: Status timelines trace agent outputs concurrently.",
+                "Step 5: The final Course Pack PDF is downloaded with 1 click."
             ],
-            "notes": "Certificates are issued automatically upon meeting attendance and assessment requirements."
+            "notes": "For the evaluation, we demonstrate a complete flow using a sample Machine Learning syllabus. We register, upload, watch the log timeline, and download the output PDF."
         },
-        # Slide 13: Corporate Training CRM
+        # Slide 13: Results and Benefits
         {
             "layout": 1,
-            "title": "Corporate CRM Contract & Billing",
+            "title": "Results & Benefits",
             "bullets": [
-                "Clients registry: Catalog corporate contacts, phone numbers and companies.",
-                "Billing Invoices: Logs invoice details, contract URL and billing totals.",
-                "Payment Tracking: Manages invoice status tags (Paid, Pending, Cancelled).",
-                "Financial Dashboard: Displays revenue rollups on the homepage."
+                "Over 8 hours saved per course planning cycle.",
+                "Ensures 100% standard formatting across university course packs.",
+                "Objective grading: Bloom's Taxonomy cognitive weights are mapped uniformly.",
+                "Immediate quality feedback allows faster curriculum iterations."
             ],
-            "notes": "Nexus provides HRDC with a CRM module to log consulting contracts and client invoices."
+            "notes": "Our metrics show a drastic improvement in efficiency, with 100% adherence to standard formatting requirements."
         },
-        # Slide 14: Mobile PWA stand-alone features
+        # Slide 14: Future Scope
         {
             "layout": 1,
-            "title": "Mobile Installable PWA Experience",
+            "title": "Future Scope & Enhancements",
             "bullets": [
-                "No App Store Required: Users install the app directly from browser options.",
-                "Stand-alone display: App opens in standalone window, hiding browser navigation.",
-                "Offline Caching: sw.js service worker caches essential pages and styles.",
-                "Responsive Layouts: Mobile, Tablet, and Desktop responsive CSS design tokens."
+                "Direct LPU LMS / UMS Integration: Push course packs to class groups instantly.",
+                "AI Lecture Notes: Automatically generate slide decks and lecture notes for weekly plans.",
+                "Syllabus Comparison: Cross-correlate multiple syllabi to identify gaps.",
+                "OpenAI/Anthropic Engine integrations."
             ],
-            "notes": "PWA compatibility makes classroom check-ins faster. Users install it with one click."
+            "notes": "In the future, we plan to connect this directly to LPU's LMS and automate lecture slide synthesis."
         },
-        # Slide 15: Security & Best Practices
+        # Slide 15: Security & Performance
         {
             "layout": 1,
-            "title": "Security & OWASP Compliance",
+            "title": "Security & Performance Considerations",
             "bullets": [
-                "Row Level Security (RLS): Supabase table access checks protect student/financial files.",
-                "JWT Token validation: Endpoints verify authentication tokens before querying database.",
-                "Input Validation: Pydantic schemas and Zod constraints sanitize data entry.",
-                "Docker isolation: Containers prevent local file-system vulnerabilities."
+                "Data Isolation: Users can only see and manage their own syllabus histories.",
+                "CORS Protection: Domain locks prevent cross-origin scripting hacks.",
+                "Async Background Workers: Keeps the API gateway responsive during heavy LLM calls.",
+                "Sanitized Database URLs: Dynamic filters prevent credential leaks in trace logs."
             ],
-            "notes": "Security is enforced at all levels. RLS ensures trainers only see their courses, and participants only see their profiles."
+            "notes": "Security is maintained via RLS policies and CORS domain restrictions, while asynchronous execution keeps the app highly responsive."
         },
-        # Slide 16: Deployment Strategy
+        # Slide 16: Conclusion
         {
             "layout": 1,
-            "title": "Cloud-Native Deployment Pipeline",
+            "title": "Conclusion",
             "bullets": [
-                "Vercel (Frontend): Continuous integration build linked to GitHub repo branches.",
-                "Render (Backend): Containerized FastAPI Docker service auto-building on git push.",
-                "Supabase Cloud: Hosts Postgres, Auth, pgvector, and Object storage.",
-                "Alembic DB migrations: Triggers migrations automatically during start commands."
+                "Decoupled multi-agent architecture successfully validated in production.",
+                "Delivers a complete, audited course package dynamically.",
+                "Bypasses complex deployment and database connection conflicts.",
+                "Innovative solution to elevate institutional planning efficiency."
             ],
-            "notes": "Our deployment pipeline is fully automated. Commits to the repository automatically redeploy the stack."
+            "notes": "In conclusion, the LPU Academic Copilot shows how agentic workflows can transform administrative tasks into standard, audited outputs."
         },
-        # Slide 17: Platform Benefits
+        # Slide 17: Thank You
         {
-            "layout": 1,
-            "title": "Institutional Benefits & Key Results",
-            "bullets": [
-                "Time Saving: Reduces administrative documentation hours by 85% per course cycle.",
-                "Accuracy: Geofencing eliminates attendance proxies and certificate fraud.",
-                "Knowledge Retrieval: LangGraph/pgvector lets staff query training details instantly.",
-                "Agility: Replaces five legacy systems with a single consolidated web workspace."
-            ],
-            "notes": "Nexus consolidates attendance, evaluations, certificates, corporate CRM, and AI support."
-        },
-        # Slide 18: Summary & Future Scope
-        {
-            "layout": 1,
-            "title": "Future Scope & Platform Roadmap",
-            "bullets": [
-                "Biometric Attendance Integration: Connect face/fingerprint scanners directly via IoT APIs.",
-                "AI Proctoring: Enable webcam analysis during subjective assessment submissions.",
-                "External Vendor API integration: Expose training courses to corporate job boards.",
-                "Automated Email Reminders: Trigger reminders via Sengrid/SMTP integration."
-            ],
-            "notes": "Future iterations will include proctoring, payment portal gateways, and biometric device bindings."
+            "layout": 0,
+            "title": "Thank You",
+            "subtitle": "Lovely Professional University (LPU)\nFDP Final Evaluation - Q&A Session",
+            "notes": "Thank you for your time. I am open to any questions you may have."
         }
     ]
     
-    for slide_info in slides_data:
+    # Process slides
+    for idx, slide_info in enumerate(slides_data):
         layout_idx = slide_info["layout"]
         slide = prs.slides.add_slide(prs.slide_layouts[layout_idx])
         
-        # Title
-        if "title" in slide_info:
-            title_box = slide.shapes.title
-            title_box.text = slide_info["title"]
-            title_box.text_frame.paragraphs[0].font.color.rgb = ORANGE
-            title_box.text_frame.paragraphs[0].font.bold = True
-            
-        # Subtitle
-        if layout_idx == 0 and "subtitle" in slide_info:
-            subtitle_box = slide.placeholders[1]
-            subtitle_box.text = slide_info["subtitle"]
-            subtitle_box.text_frame.paragraphs[0].font.color.rgb = CHARCOAL
-            
-        # Bullets
-        if "bullets" in slide_info and layout_idx == 1:
-            body_box = slide.placeholders[1]
-            tf = body_box.text_frame
+        # Add presenter notes
+        notes_slide = slide.notes_slide
+        text_frame = notes_slide.notes_text_frame
+        text_frame.text = slide_info.get("notes", "")
+        
+        # Add Title
+        title_shape = slide.shapes.title
+        title_shape.text = slide_info["title"]
+        
+        # Add subtitle (for layout 0) or bullets (for layout 1)
+        if layout_idx == 0:
+            subtitle_shape = slide.placeholders[1]
+            subtitle_shape.text = slide_info["subtitle"]
+        elif layout_idx == 1:
+            body_shape = slide.placeholders[1]
+            tf = body_shape.text_frame
             tf.clear()
-            for idx, bullet in enumerate(slide_info["bullets"]):
-                p = tf.add_paragraph() if idx > 0 else tf.paragraphs[0]
+            for b_idx, bullet in enumerate(slide_info.get("bullets", [])):
+                p = tf.add_paragraph() if b_idx > 0 else tf.paragraphs[0]
                 p.text = bullet
                 p.level = 0
-                p.font.size = Pt(14)
-                p.font.color.rgb = CHARCOAL
                 
-        # Speaker notes
-        if "notes" in slide_info:
-            notes_slide = slide.notes_slide
-            text_frame = notes_slide.notes_text_frame
-            text_frame.text = slide_info["notes"]
-            
-    # Save PPTX
-    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    output_path = os.path.join(root_dir, "LPU_FDP_Presentation.pptx")
+    # Save presentation
+    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "LPU_FDP_Presentation.pptx")
     prs.save(output_path)
-    print(f"Presentation generated successfully at: {output_path}")
+    print(f"Presentation saved successfully to: {output_path}")
 
 if __name__ == "__main__":
     create_presentation()

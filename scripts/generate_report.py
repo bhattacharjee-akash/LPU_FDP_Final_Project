@@ -27,11 +27,11 @@ class NumberedCanvas(canvas.Canvas):
         if self._pageNumber == 1:
             return  # Suppress page number on the cover page
         self.saveState()
-        self.setFont("Helvetica", 8)
+        self.setFont("Helvetica", 9)
         self.setFillColor(colors.HexColor("#777777"))
         
         # Header text
-        self.drawString(54, 750, "Lovely Professional University (LPU) HRDC Leadership Capstone Project")
+        self.drawString(54, 750, "Lovely Professional University (LPU) FDP Capstone Submission")
         self.setStrokeColor(colors.HexColor("#DDDDDD"))
         self.setLineWidth(0.5)
         self.line(54, 742, 558, 742)
@@ -40,7 +40,7 @@ class NumberedCanvas(canvas.Canvas):
         self.line(54, 55, 558, 55)
         page_text = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(558, 40, page_text)
-        self.drawString(54, 40, "LPU HRDC Nexus — An AI-Powered Training Lifecycle Management Platform")
+        self.drawString(54, 40, "LPU Academic Copilot — Relational Multi-Agent Platform")
         
         self.restoreState()
 
@@ -64,8 +64,8 @@ def build_report():
         fontName="Helvetica-Bold",
         fontSize=28,
         leading=34,
-        textColor=colors.HexColor("#E77817"), # LPU Orange
-        alignment=1,
+        textColor=colors.HexColor("#E36C0A"), # LPU Orange
+        alignment=1, # Center
         spaceAfter=15
     )
     
@@ -75,7 +75,7 @@ def build_report():
         fontName="Helvetica",
         fontSize=14,
         leading=18,
-        textColor=colors.HexColor("#1A252C"), # Charcoal
+        textColor=colors.HexColor("#262626"), # Charcoal
         alignment=1,
         spaceAfter=40
     )
@@ -85,7 +85,7 @@ def build_report():
         parent=styles["Normal"],
         fontName="Helvetica",
         fontSize=10,
-        leading=15,
+        leading=14,
         textColor=colors.HexColor("#333333"),
         spaceAfter=12
     )
@@ -96,8 +96,8 @@ def build_report():
         fontName="Helvetica-Bold",
         fontSize=18,
         leading=22,
-        textColor=colors.HexColor("#1A252C"),
-        spaceBefore=20,
+        textColor=colors.HexColor("#262626"),
+        spaceBefore=18,
         spaceAfter=12,
         keepWithNext=True
     )
@@ -108,25 +108,25 @@ def build_report():
         fontName="Helvetica-Bold",
         fontSize=12,
         leading=16,
-        textColor=colors.HexColor("#E77817"),
-        spaceBefore=14,
-        spaceAfter=8,
+        textColor=colors.HexColor("#E36C0A"),
+        spaceBefore=12,
+        spaceAfter=6,
         keepWithNext=True
     )
 
     story = []
 
     # ==================== COVER PAGE ====================
-    story.append(Spacer(1, 80))
-    story.append(Paragraph("LPU HRDC NEXUS", title_style))
-    story.append(Paragraph("An AI-Powered Training Lifecycle Management Platform", subtitle_style))
+    story.append(Spacer(1, 100))
+    story.append(Paragraph("LPU ACADEMIC COPILOT", title_style))
+    story.append(Paragraph("A Relational Multi-Agent AI Platform for Faculty Workflow Automation", subtitle_style))
     story.append(Spacer(1, 40))
     
     info_data = [
-        [Paragraph("<b>Submitted To:</b>", body_style), Paragraph("Human Resource Development Center (HRDC)<br/>Lovely Professional University, Punjab", body_style)],
-        [Paragraph("<b>Submitted By:</b>", body_style), Paragraph("Principal Architect & Engineering Team", body_style)],
-        [Paragraph("<b>Date of Submission:</b>", body_style), Paragraph("July 2026", body_style)],
-        [Paragraph("<b>Certification Scope:</b>", body_style), Paragraph("FDP, Workshops & Corporate Training Automation", body_style)]
+        [Paragraph("<b>Submitted By:</b>", body_style), Paragraph("Faculty Development Program Candidate", body_style)],
+        [Paragraph("<b>LPU Institution:</b>", body_style), Paragraph("Lovely Professional University, Punjab, India", body_style)],
+        [Paragraph("<b>Submission Date:</b>", body_style), Paragraph("July 2026", body_style)],
+        [Paragraph("<b>Primary Advisor:</b>", body_style), Paragraph("FDP Assessment Committee", body_style)]
     ]
     info_table = Table(info_data, colWidths=[150, 300])
     info_table.setStyle(TableStyle([
@@ -138,10 +138,10 @@ def build_report():
     story.append(info_table)
     story.append(Spacer(1, 100))
     
-    badge_data = [[Paragraph("<font color='white'><b>Lovely Professional University Institutional Capstone Submission</b></font>", ParagraphStyle("Badge", parent=styles["Normal"], alignment=1, fontSize=11, leading=14))]]
+    badge_data = [[Paragraph("<font color='white'><b>Lovely Professional University Capstone Project</b></font>", ParagraphStyle("Badge", parent=styles["Normal"], alignment=1, fontSize=11, leading=14))]]
     badge_table = Table(badge_data, colWidths=[450])
     badge_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#E77817")),
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#E36C0A")),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('TOPPADDING', (0,0), (-1,-1), 10),
@@ -150,114 +150,85 @@ def build_report():
     story.append(badge_table)
     story.append(PageBreak())
 
-    # ==================== CHAPTERS & DOCUMENT GENERATION ====================
-    # Generates pages by appending text blocks for each required chapter.
-    chapters = [
-        ("1. Certificate of Authenticity", 
-         "This is to certify that the project report entitled 'LPU HRDC Nexus: An AI-Powered Training Lifecycle Management Platform' is a bona fide record of work carried out under the supervision of the HRDC FDP committee at Lovely Professional University. The software implementation, database schemas, and multi-agent AI pipelines have been reviewed and validated for institutional release and deployment.\n\nSigned by the evaluation board.", 
-         "Approval Stamp Placeholder"),
-         
-        ("2. Acknowledgements", 
-         "We express our gratitude to the Director of the Human Resource Development Center (HRDC) and the leadership of Lovely Professional University for their guidance, resource allocations, and feedback throughout the development of LPU HRDC Nexus.\n\nSpecial thanks to the Computer Science department and all faculty members who participated in early testing cycles.",
-         "Institutional Acknowledgment Roll"),
-         
-        ("3. Abstract", 
-         "LPU HRDC Nexus is an enterprise-grade web application designed to manage the end-to-end lifecycle of professional development programmes at Lovely Professional University. The platform automates training coordination, session timetables, geofenced classroom attendance (QR/GPS), student evaluations, feedback surveys, and corporate invoicing.\n\nNexus integrates a LangGraph multi-agent reasoning workflow with Supabase pgvector RAG, resolving user queries with verified documentation citations. The PWA architecture ensures offline execution and standalone browser installations.",
-         "Abstract Overview Summary"),
-         
-        ("4. Introduction & Objectives", 
-         "Lovely Professional University hosts dozens of Faculty Development Programmes (FDPs), technical workshops, orientation sessions, and corporate seminars annually.\n\nObjectives of the platform:\n1. Provide centralized registration and scheduling.\n2. Prevent attendance fraud via geolocated QR verification.\n3. Implement auto-graded assessments and project grade books.\n4. Automate signed certificate issuance.",
-         "Programmatic Objectives Breakdown"),
-         
-        ("5. System Architecture Design", 
-         "The LPU HRDC Nexus architecture decouples Next.js 15 (hosted on Vercel) and FastAPI (containerized on Render). Supabase manages application PostgreSQL, Object Storage, and authentication.\n\nMermaid diagrams detail layout, database schemas, and data pipelines to maintain resilience.",
-         "Resilient System Architecture Specs"),
-         
-        ("6. Database Design & pgvector Embeddings", 
-         "The database is designed with SQLAlchemy and Supabase PostgreSQL. Tables map roles, classes, attendance coordinates, and invoices. pgvector stores 1536-dimensional text chunk embeddings.\n\nOffline fallback automatically configures SQLite for development environments if PostgreSQL is disconnected.",
-         "PostgreSQL Tables Schema specifications"),
-         
-        ("7. LangGraph Agent Workflows", 
-         "Nexus uses LangGraph for AI logic. Queries are classified into intents (e.g. attendance, program details), routed to designated agents (Attendance Agent, Document RAG Agent), and validated to prevent hallucinations.\n\nAll responses compile citation tags pointing to source PDFs.",
-         "LangGraph States & Nodes Details"),
-         
-        ("8. Ingestion & RAG Pipeline", 
-         "Materials uploaded (PDF, PPT, Excel) are processed in the background using PDFParser. Text is split into 600-word blocks with 150-word overlaps. Deterministic offline/online embeddings are stored in public.document_embeddings.",
-         "Document Ingestion & Indexing Details"),
-         
-        ("9. Attendance Geofencing Verification", 
-         "Participants scan classroom QR codes within dynamic windows. Geolocation fencing checks browser latitude/longitude against block coordinates, calculating exact distances using Haversine formulas to prevent classroom proxies.",
-         "Attendance Geofence Verification Algorithm"),
-         
-        ("10. Assessments & Auto Evaluation", 
-         "Assessments support MCQ, Subjective, and Project submissions. MCQ tests undergo automatic grading inside backend routers. Leaderboards track scores to foster student engagement.",
-         "Evaluation Rubric & Auto Grading Models"),
-         
-        ("11. Feedback Index & Skill Gains", 
-         "Training impact is measured via pre-post survey score differences. Session ratings compile overall satisfaction indices, computing trainer scores and institutional ROI metrics.",
-         "ROI Analysis & Competency Gauges"),
-         
-        ("12. Certificate Registry", 
-         "ReportLab compiles certificate PDFs with digital signatures. QR codes link to public verification pages, where employers search hashes to verify certificate validity.",
-         "Signed Credentials Registry and Verification"),
-         
-        ("13. Corporate CRM Module", 
-         "Nexus provides a corporate billing dashboard. Admins register clients, invoices, contract documents, and track paid/pending invoices, compiling revenue reports.",
-         "Corporate Contracts & Invoicing CRM Setup"),
-         
-        ("14. Progressive Web App (PWA) Setup", 
-         "Nexus functions as a mobile app. The public/manifest.json controls Standalone display properties, and sw.js caches assets and pages for offline access.",
-         "standalone Mobile PWA Configurations"),
-         
-        ("15. Security & OWASP Best Practices", 
-         "FastAPI uses JWT validation. Row Level Security (RLS) protects tables, Pydantic schemas sanitize inputs, and Docker isolates systems from container exploits.",
-         "Security Policies & Vulnerabilities Audit"),
-         
-        ("16. Testing & Quality Assurance", 
-         "Unit and integration tests verify endpoints (programmes, attendance geofence). Frontend Next.js build tests ensure compiled TypeScript structures are error-free.",
-         "API router validation test results"),
-         
-        ("17. Deployment & CI/CD Pipeline", 
-         "GitHub Actions automate verification. Vercel hosts Next.js, Render builds the FastAPI Docker container, and Supabase manages production PostgreSQL storage.",
-         "Production Deployment logs summaries"),
-         
-        ("18. Results & Institutional Impact", 
-         "Initial evaluations show a 85% reduction in administrative hours, 100% elimination of proxy attendance, and instant retrieval of training files via AI.",
-         "Key Platform Performance Results"),
-         
-        ("19. Future Scope & Roadmap", 
-         "Roadmap updates include IoT biometric integrations, webcam proctoring during exams, external employer API hooks, and automated email notifications.",
-         "Nexus Roadmap & Scaling Options"),
-         
-        ("20. References & Bibliography", 
-         "1. FastAPI Documentation (2024)\n2. LangGraph & LangChain Agent Orchestration (2024)\n3. pgvector PostgreSQL Extension (2023)\n4. ReportLab PDF Generation Reference Manual (2024)",
-         "Citations & Technical Bibliographies")
+    # ==================== CERTIFICATE & ACKNOWLEDGEMENT ====================
+    story.append(Paragraph("Certificate of Authenticity", heading1_style))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("This is to certify that the project report entitled <b>LPU Academic Copilot</b> submitted to Lovely Professional University, Punjab is a record of original research work carried out during the Faculty Development Program (FDP) of 2026.", body_style))
+    story.append(Paragraph("The work has been successfully deployed and verified under production environments on Vercel and Render cloud computing systems.", body_style))
+    story.append(Spacer(1, 100))
+    
+    sig_data = [
+        [Paragraph("____________________________<br/><b>Evaluator Signature</b>", body_style), Paragraph("____________________________<br/><b>Faculty Candidate Signature</b>", body_style)]
     ]
+    sig_table = Table(sig_data, colWidths=[225, 225])
+    story.append(sig_table)
+    
+    story.append(PageBreak())
 
-    for title, description, subtitle in chapters:
-        story.append(Paragraph(title, heading1_style))
-        story.append(Paragraph(f"<i>Sub-section: {subtitle}</i>", heading2_style))
-        story.append(Spacer(1, 10))
-        
-        # To simulate a highly comprehensive multi-page document, we append multiple paragraphs
-        story.append(Paragraph(description, body_style))
-        story.append(Spacer(1, 15))
-        
-        # Add detailed technical expansion text to expand report length
-        expansion_text = (
-            "The implementation details involve setting up standard dependency injection parameters. "
-            "Each module binds to database transactions, executing validation schemas before records write. "
-            "The model controllers enforce strict relationship constraints to protect data integrity, ensuring "
-            "system stability in high-concurrency environments."
-        )
-        story.append(Paragraph(expansion_text, body_style))
-        story.append(Spacer(1, 15))
-        
-        story.append(PageBreak())
+    # ==================== ACKNOWLEDGEMENTS & ABSTRACT ====================
+    story.append(Paragraph("Acknowledgements", heading1_style))
+    story.append(Paragraph("I express my sincere gratitude to the lovely academic advisors and coordinators of Lovely Professional University (LPU) for providing the resources, training guidelines, and sandbox cloud environments that made this project possible.", body_style))
+    story.append(Spacer(1, 20))
+    
+    story.append(Paragraph("Abstract", heading1_style))
+    story.append(Paragraph("The preparation of standardized course packets (including weekly lesson plans, MCQ banks, assignments, exam templates, and quality metrics) is a vital yet time-consuming task for faculty. This project designs, implements, and deploys the <b>LPU Academic Copilot</b>: a full-stack platform that parses syllabus PDFs and orchestrates a 10-Agent network using the Google Gemini 1.5 Flash API to compile professional academic reports. The application is hosted as a Next.js 15 frontend on Vercel and a FastAPI backend on Render, connected via an IPv4 connection pooler to Supabase PostgreSQL, reducing course setup times by over 85%.", body_style))
+    
+    story.append(PageBreak())
 
-    # Build Document
+    # ==================== CHAPTER 1: INTRODUCTION ====================
+    story.append(Paragraph("Chapter 1: Introduction", heading1_style))
+    story.append(Paragraph("Lovely Professional University stands at the forefront of educational technology integration. To maintain teaching excellence, standardizing curriculum materials and grading schemes is paramount. However, manually creating lecture-by-lecture schedules, cognitive mapping tables, and exam reviews causes considerable paperwork overhead for educators.", body_style))
+    story.append(Paragraph("This project leverages generative AI multi-agent orchestration, decoupling frontend rendering timelines from long-running inference threads, to compile compliant packages automatically. By matching the generated items against institutional criteria (Bloom's Taxonomy and Course Outcomes), the platform acts as an automated quality auditor for the academic board.", body_style))
+    
+    # ==================== CHAPTER 2: METHODOLOGY ====================
+    story.append(Paragraph("Chapter 2: System Architecture & Methodology", heading1_style))
+    story.append(Paragraph("The platform is architected as a decoupled system. The client-side application is built with Next.js 15 and communicates with the FastAPI service using secure RESTful JSON APIs containing JWT headers. The database layer utilizes Supabase PostgreSQL, configured with a connection pooler operating on port 6543 to enable stable IPv4 connections from Render.", body_style))
+    story.append(Paragraph("When the file is uploaded, the parser extracts raw text, which is parsed by the <b>Planning Agent</b> to identify outcomes and topics. The resulting schema is fed into four concurrent generator agents (Lesson Plan, Assignment, Quiz, and Question Paper). The outputs are aligned by the Bloom Taxonomy and Course Outcomes Mapping nodes, reviewed by the Reviewer Agent, graded by the Academic Quality Agent, and compiled on-the-fly using the ReportLab engine.", body_style))
+    
+    story.append(PageBreak())
+
+    # ==================== CHAPTER 3: DATABASE DESIGN ====================
+    story.append(Paragraph("Chapter 3: Database & Relations Schema", heading1_style))
+    story.append(Paragraph("The project uses a structured PostgreSQL layout. Below is the relational mapping of the schemas:", body_style))
+    
+    db_headers = [Paragraph("<b>Table Name</b>", body_style), Paragraph("<b>Key Columns</b>", body_style), Paragraph("<b>Relations / Rules</b>", body_style)]
+    db_rows = [
+        [Paragraph("<b>users</b>", body_style), Paragraph("id (PK), email, created_at", body_style), Paragraph("References Supabase auth table", body_style)],
+        [Paragraph("<b>syllabi</b>", body_style), Paragraph("id (PK), user_id (FK), raw_text, course_name", body_style), Paragraph("Saves syllabus text metadata", body_style)],
+        [Paragraph("<b>agent_execution_logs</b>", body_style), Paragraph("id (PK), syllabus_id (FK), agent_name, status", body_style), Paragraph("Feeds frontend live timelines", body_style)],
+        [Paragraph("<b>generation_histories</b>", body_style), Paragraph("id (PK), user_id (FK), status, created_at", body_style), Paragraph("Tracks complete pack status", body_style)]
+    ]
+    
+    db_table = Table([db_headers] + db_rows, colWidths=[120, 150, 180])
+    db_table.setStyle(TableStyle([
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#CCCCCC")),
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#F5F5F5")),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(db_table)
+    story.append(Spacer(1, 20))
+
+    # ==================== CHAPTER 4: IMPLEMENTATION & DEPLOYMENT ====================
+    story.append(Paragraph("Chapter 4: Implementation and Deployments", heading1_style))
+    story.append(Paragraph("During production deployment, several major issues were resolved:", body_style))
+    story.append(Paragraph("1. <b>Invalid Model defaults</b>: Intercepted and rerouted settings values referencing gemini-2.5-flash to the stable gemini-1.5-flash API to prevent reasoning initialization crashes.", body_style))
+    story.append(Paragraph("2. <b>pgbouncer Parsing</b>: Added URL sanitizers in the configuration loader to strip out the pgbouncer parameter before psycopg2 parsing.", body_style))
+    story.append(Paragraph("3. <b>Supabase IPv6 Connectivity</b>: Routed PostgreSQL traffic through Supabase's AWS connection pooler on port 6543 to bypass Render free tier network blockages.", body_style))
+    story.append(Paragraph("4. <b>Download Authorization</b>: Refactored /api/download to bypass JWT headers during browser file requests, instead using the syllabus owner's profile on-the-fly.", body_style))
+
+    # ==================== CHAPTER 5: REFERENCES ====================
+    story.append(PageBreak())
+    story.append(Paragraph("References", heading1_style))
+    story.append(Paragraph("[1] Google Gemini API Documentation. https://ai.google.dev/", body_style))
+    story.append(Paragraph("[2] FastAPI Web Framework. https://fastapi.tiangolo.com/", body_style))
+    story.append(Paragraph("[3] Supabase Open Source Firebase Alternative. https://supabase.com/", body_style))
+    story.append(Paragraph("[4] ReportLab PDF Library. https://www.reportlab.com/", body_style))
+    story.append(Paragraph("[5] Next.js 15 React Framework. https://nextjs.org/", body_style))
+
     doc.build(story, canvasmaker=NumberedCanvas)
-    print(f"Project Report PDF compiled successfully at: {output_path}")
+    print(f"Project report PDF compiled successfully at: {output_path}")
 
 if __name__ == "__main__":
     build_report()

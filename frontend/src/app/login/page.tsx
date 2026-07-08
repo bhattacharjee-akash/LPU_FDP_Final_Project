@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { Cpu, Mail, Lock, LogIn, ArrowRight, ShieldCheck, Sparkles, User } from 'lucide-react';
+import { Cpu, Mail, Lock, LogIn, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {
@@ -14,12 +14,12 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   
-  // Profile parameters (captured during login/sign up)
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('Participant');  // Default role
+  // Faculty Profile parameters (captured during login/sign up)
+  const [facultyName, setFacultyName] = useState('');
   const [department, setDepartment] = useState('Computer Science & Engineering');
 
   useEffect(() => {
+    // Check if session is already active
     if (isSupabaseConfigured) {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
@@ -35,10 +35,9 @@ export default function LoginPage() {
     setError('');
 
     if (!isSupabaseConfigured) {
-      // Mock Bypass for Demonstration Mode
+      // Mock Bypass for FDP Demonstration Mode
       localStorage.setItem('fdp_demo_mode', 'true');
-      localStorage.setItem('faculty_name', name || 'Dr. Amanpreet Singh');
-      localStorage.setItem('user_role', role);
+      localStorage.setItem('faculty_name', facultyName || 'Dr. Amanpreet Singh');
       localStorage.setItem('department', department);
       router.push('/dashboard');
       setLoading(false);
@@ -53,15 +52,14 @@ export default function LoginPage() {
           password,
           options: {
             data: {
-              name: name,
-              role: role,
+              name: facultyName,
               department: department
             }
           }
         });
         if (signUpErr) throw signUpErr;
         
-        // Trigger profile update route on FastAPI
+        // Trigger profile update route
         const token = data.session?.access_token;
         if (token) {
           await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/profile`, {
@@ -70,11 +68,11 @@ export default function LoginPage() {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ name, role, department, user_id: data.user?.id })
+            body: JSON.stringify({ name: facultyName, department, user_id: data.user?.id })
           });
         }
 
-        alert("Sign up successful! Please check your email for verification and log in.");
+        alert("Sign up successful! Please log in.");
         setIsSignUp(false);
       } else {
         // Log In Flow
@@ -84,7 +82,7 @@ export default function LoginPage() {
         });
         if (logInErr) throw logInErr;
         
-        // Save token & info to verify setup
+        // Fetch/save profile setup
         const token = data.session?.access_token;
         if (token && data.user) {
           try {
@@ -96,7 +94,6 @@ export default function LoginPage() {
               },
               body: JSON.stringify({
                 name: data.user.user_metadata?.name || 'Faculty Member',
-                role: data.user.user_metadata?.role || 'Participant',
                 department: data.user.user_metadata?.department || 'Computer Science & Engineering',
                 user_id: data.user.id
               })
@@ -114,21 +111,10 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoMode = (demoRole: string) => {
+  const handleDemoMode = () => {
     localStorage.setItem('fdp_demo_mode', 'true');
-    localStorage.setItem('user_role', demoRole);
-    
-    if (demoRole === 'HRDC Administrator') {
-      localStorage.setItem('faculty_name', 'Director HRDC (LPU)');
-      localStorage.setItem('department', 'Academic Administration');
-    } else if (demoRole === 'Trainer') {
-      localStorage.setItem('faculty_name', 'Dr. Amanpreet Singh (AI Trainer)');
-      localStorage.setItem('department', 'Computer Science & Engineering');
-    } else {
-      localStorage.setItem('faculty_name', 'Dr. Ramesh Kumar (Participant)');
-      localStorage.setItem('department', 'Mechanical Engineering');
-    }
-    
+    localStorage.setItem('faculty_name', 'Dr. Amanpreet Singh');
+    localStorage.setItem('department', 'Computer Science & Engineering');
     router.push('/dashboard');
   };
 
@@ -151,38 +137,38 @@ export default function LoginPage() {
               <Cpu size={24} />
             </div>
             <div>
-              <span className="font-bold text-lg text-white tracking-wide">LPU HRDC</span>
-              <span className="text-xs text-lpu-orange font-bold tracking-widest block">NEXUS</span>
+              <span className="font-bold text-lg text-white tracking-wide">LPU Academic</span>
+              <span className="text-xs text-lpu-orange font-bold tracking-widest block">COPILOT</span>
             </div>
           </div>
 
           <div className="my-12 flex flex-col gap-6">
             <div className="flex items-center gap-2 text-lpu-orange text-xs font-semibold tracking-wider bg-lpu-orange/10 px-3 py-1 rounded-full w-max">
               <Sparkles size={12} />
-              Training Lifecycle Engine
+              Multi-Agent Orchestrator
             </div>
             <h2 className="text-2xl font-bold text-white leading-snug">
-              An AI-Powered Training Lifecycle Management Platform.
+              Autonomous workflows designed for university faculty.
             </h2>
             <p className="text-gray-400 text-sm font-light leading-relaxed">
-              Log in to register for FDPs, verify classroom attendance via QR/GPS, complete evaluations, download digital signatures certificates, and interact with the LangGraph knowledge assistant.
+              Log in to configure your preferred LLM parameters, upload course documents, and generate complete quality-certified course plans.
             </p>
           </div>
 
           <div className="text-xs text-gray-500 flex items-center gap-2">
             <ShieldCheck size={16} className="text-lpu-orange" />
-            Secured via Supabase RBAC
+            Secured via Supabase Authentication
           </div>
         </div>
 
         {/* Right column form panel */}
         <div className="md:w-1/2 p-8 flex flex-col justify-center">
           <h3 className="text-xl font-bold text-white mb-2">
-            {isSignUp ? 'Create HRDC Account' : 'Sign In'}
+            {isSignUp ? 'Create Faculty Account' : 'Welcome Back'}
           </h3>
           <p className="text-xs text-gray-400 mb-6">
             {!isSupabaseConfigured 
-              ? 'Connect using Supabase, or pick a role below for instant demo access.' 
+              ? 'Supabase is not configured. Running in Local Demo Mode.' 
               : 'Enter your credentials to access the academic portal.'}
           </p>
 
@@ -195,37 +181,25 @@ export default function LoginPage() {
                     type="text"
                     required
                     placeholder="e.g. Dr. Amanpreet Singh"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={facultyName}
+                    onChange={(e) => setFacultyName(e.target.value)}
                     className="px-4 py-3 rounded-xl glass-input text-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-gray-400 font-medium">Access Role</label>
+                  <label className="text-xs text-gray-400 font-medium">Academic Department</label>
                   <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="px-4 py-3 rounded-xl glass-input text-sm bg-lpu-charcoal"
-                  >
-                    <option value="Participant">Participant (Faculty / External)</option>
-                    <option value="Trainer">Trainer (Resource Person)</option>
-                    <option value="HRDC Staff">HRDC Staff</option>
-                    <option value="HRDC Administrator">HRDC Administrator</option>
-                    <option value="Corporate Client">Corporate Client</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs text-gray-400 font-medium">Department / Organization</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Computer Science"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="px-4 py-3 rounded-xl glass-input text-sm"
-                  />
+                    className="px-4 py-3 rounded-xl glass-input text-sm bg-lpu-charcoal"
+                  >
+                    <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Electronics & Communication">Electronics & Communication</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Management & Commerce">Management & Commerce</option>
+                  </select>
                 </div>
               </>
             )}
@@ -237,7 +211,7 @@ export default function LoginPage() {
                 <input
                   type="email"
                   required
-                  placeholder="name@lpu.co.in"
+                  placeholder="faculty@lpu.co.in"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-11 pr-4 py-3 rounded-xl glass-input text-sm w-full"
@@ -271,35 +245,27 @@ export default function LoginPage() {
               disabled={loading}
               className="bg-lpu-orange hover:bg-lpu-orangeHover disabled:bg-lpu-orange/50 py-3.5 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2 mt-2 shadow-lg shadow-lpu-orange/20"
             >
-              <span>{isSignUp ? 'Register & Enter' : 'Sign In to Portal'}</span>
-              <LogIn size={18} />
+              {loading ? (
+                <span>Validating...</span>
+              ) : (
+                <>
+                  <span>{isSignUp ? 'Register & Enter' : 'Sign In to Dashboard'}</span>
+                  <LogIn size={18} />
+                </>
+              )}
             </button>
           </form>
 
           {/* Quick Demo Mode triggers if credentials/setup aren't verified */}
-          <div className="mt-6 border-t border-white/5 pt-4">
-            <span className="text-xs text-gray-500 block mb-3 text-center">Or connect instantly via Demo Portal:</span>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                onClick={() => handleDemoMode('HRDC Administrator')}
-                className="border border-lpu-orange/20 hover:bg-lpu-orange/10 text-white text-[10px] py-2 rounded-lg font-semibold transition-all"
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => handleDemoMode('Trainer')}
-                className="border border-lpu-orange/20 hover:bg-lpu-orange/10 text-white text-[10px] py-2 rounded-lg font-semibold transition-all"
-              >
-                Trainer
-              </button>
-              <button
-                onClick={() => handleDemoMode('Participant')}
-                className="border border-lpu-orange/20 hover:bg-lpu-orange/10 text-white text-[10px] py-2 rounded-lg font-semibold transition-all"
-              >
-                Participant
-              </button>
-            </div>
-          </div>
+          {!isSupabaseConfigured && (
+            <button
+              onClick={handleDemoMode}
+              className="border border-lpu-orange/30 hover:bg-lpu-orange/5 text-lpu-orange text-xs py-3.5 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+            >
+              <span>Instant FDP Demo Access</span>
+              <ArrowRight size={14} />
+            </button>
+          )}
 
           <div className="mt-6 text-center">
             <button
