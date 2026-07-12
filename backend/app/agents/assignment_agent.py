@@ -9,8 +9,14 @@ class AssignmentAgent(BaseAgent):
         if self.should_use_fallback():
             return self._get_mock_response(planning_data)
             
-        response_text = self.generate(system_instruction, user_prompt, json_mode=True)
-        return self.clean_json_response(response_text)
+        for attempt in range(2):
+            try:
+                response_text = self.generate(system_instruction, user_prompt, json_mode=True)
+                return self.clean_json_response(response_text)
+            except Exception as e:
+                if attempt == 1:
+                    raise e
+                print(f"AssignmentAgent generation failed: {str(e)}. Retrying...")
 
     def _get_mock_response(self, planning_data: dict) -> dict:
         return {

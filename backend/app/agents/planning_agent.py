@@ -9,8 +9,14 @@ class PlanningAgent(BaseAgent):
         if self.should_use_fallback():
             return self._get_mock_response(syllabus_text)
             
-        response_text = self.generate(system_instruction, user_prompt, json_mode=True)
-        return self.clean_json_response(response_text)
+        for attempt in range(2):
+            try:
+                response_text = self.generate(system_instruction, user_prompt, json_mode=True)
+                return self.clean_json_response(response_text)
+            except Exception as e:
+                if attempt == 1:
+                    raise e
+                print(f"PlanningAgent generation failed: {str(e)}. Retrying...")
 
     def _get_mock_response(self, syllabus_text: str) -> dict:
         # Standard mock parsing if no API key
