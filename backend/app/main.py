@@ -70,11 +70,11 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
 
         # Check API key formats to prevent silent model 404 failures
         gemini_key = settings.GEMINI_API_KEY
-        if provider == "gemini" and gemini_key and not gemini_key.startswith("AIzaSy"):
+        if provider == "gemini" and gemini_key and not (gemini_key.startswith("AIzaSy") or gemini_key.startswith("AQ.")):
             raise ValueError(
-                f"Your GEMINI_API_KEY format is invalid. Google AI Studio keys must start with 'AIzaSy' "
+                f"Your GEMINI_API_KEY format is invalid. Google Gemini keys must start with 'AIzaSy' or 'AQ.' "
                 f"(yours starts with '{gemini_key[:8] if gemini_key else 'None'}...'). Please obtain a valid API key "
-                f"from Google AI Studio (https://aistudio.google.com/) and update it in your Render settings."
+                f"and update it in your Render settings."
             )
 
         # -- STEP 1: Planning Agent --
