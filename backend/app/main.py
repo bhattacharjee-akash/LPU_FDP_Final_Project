@@ -60,8 +60,8 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
             elif model_name in ["gemini-1.5-pro", "gemini-2.5-pro", "gemini-pro-latest"]:
                 model_name = "gemini-pro-latest"
         elif provider == "groq":
-            if model_name in ["mixtral-8x7b-32768", "llama3-70b-8192", "llama-3.3-70b-versatile"]:
-                model_name = "llama-3.3-70b-versatile"
+            if model_name in ["mixtral-8x7b-32768", "llama3-70b-8192", "llama-3.1-8b-instant"]:
+                model_name = "llama-3.1-8b-instant"
 
         # Initialize agents with loaded user settings
         planner = PlanningAgent(provider, model_name, temp)
