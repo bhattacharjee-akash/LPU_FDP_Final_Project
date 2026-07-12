@@ -53,11 +53,15 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
         crud.create_log(db, syllabus_id, "System", "STARTED", "Starting multi-agent orchestration pipeline.")
         crud.update_history_status(db, syllabus_id, "PROCESSING")
 
-        # Map model names to the current active stable equivalents supported by the key
-        if model_name in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-flash-latest"]:
-            model_name = "gemini-flash-latest"
-        elif model_name in ["gemini-1.5-pro", "gemini-2.5-pro", "gemini-pro-latest"]:
-            model_name = "gemini-pro-latest"
+        # Map model names to the current active stable equivalents supported by the keys
+        if provider == "gemini":
+            if model_name in ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-flash-latest"]:
+                model_name = "gemini-flash-latest"
+            elif model_name in ["gemini-1.5-pro", "gemini-2.5-pro", "gemini-pro-latest"]:
+                model_name = "gemini-pro-latest"
+        elif provider == "groq":
+            if model_name in ["mixtral-8x7b-32768", "llama3-70b-8192", "llama-3.3-70b-versatile"]:
+                model_name = "llama-3.3-70b-versatile"
 
         # Initialize agents with loaded user settings
         planner = PlanningAgent(provider, model_name, temp)

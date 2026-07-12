@@ -174,8 +174,8 @@ export default function SettingsPage() {
                   </>
                 ) : (
                   <>
-                    <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
-                    <option value="llama3-70b-8192">llama3-70b-8192 (Powerful)</option>
+                    <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Recommended)</option>
+                    <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Fast)</option>
                     <option value="gemma2-9b-it">gemma2-9b-it</option>
                   </>
                 )}
