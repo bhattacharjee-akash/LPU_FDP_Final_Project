@@ -438,3 +438,31 @@ def get_debug_logs(db: Session = Depends(get_db)):
             } for h in histories
         ]
     }
+
+@app.get("/api/debug-models")
+def get_debug_models():
+    import google.generativeai as genai
+    from app.config import settings
+    gemini_key = settings.GEMINI_API_KEY
+    if not gemini_key:
+        return {"error": "GEMINI_API_KEY is not configured in settings."}
+    try:
+        genai.configure(api_key=gemini_key)
+        models_list = []
+        for m in genai.list_models():
+            models_list.append({
+                "name": m.name,
+                "version": m.version if hasattr(m, "version") else "unknown",
+                "supported_generation_methods": m.supported_generation_methods
+            })
+        return {
+            "key_prefix": gemini_key[:8] if gemini_key else "None",
+            "models": models_list
+        }
+    except Exception as e:
+        import traceback
+        return {
+            "key_prefix": gemini_key[:8] if gemini_key else "None",
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }
