@@ -53,6 +53,12 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
         crud.create_log(db, syllabus_id, "System", "STARTED", "Starting multi-agent orchestration pipeline.")
         crud.update_history_status(db, syllabus_id, "PROCESSING")
 
+        # Map legacy/deprecated model names to the current active equivalents supported by the key
+        if model_name == "gemini-1.5-flash":
+            model_name = "gemini-2.5-flash"
+        elif model_name == "gemini-1.5-pro":
+            model_name = "gemini-2.5-pro"
+
         # Initialize agents with loaded user settings
         planner = PlanningAgent(provider, model_name, temp)
         lesson_planner = LessonPlanAgent(provider, model_name, temp)
