@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     
     # Defaults
     DEFAULT_LLM_PROVIDER: str = "gemini" # gemini or groq
-    DEFAULT_GEMINI_MODEL: str = "gemini-2.5-flash"
+    DEFAULT_GEMINI_MODEL: str = "gemini-flash-latest"
     DEFAULT_GROQ_MODEL: str = "mixtral-8x7b-32768"
     DEFAULT_TEMPERATURE: float = 0.7
     
