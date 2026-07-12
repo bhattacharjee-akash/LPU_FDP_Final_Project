@@ -145,7 +145,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => {
                     setProvider('groq');
-                    setModelName('mixtral-8x7b-32768');
+                    setModelName('llama-3.3-70b-versatile');
                   }}
                   className={`py-3 rounded-xl font-bold border text-xs transition-all ${
                     provider === 'groq' 
