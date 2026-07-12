@@ -167,15 +167,17 @@ export default function SettingsPage() {
               >
                 {provider === 'gemini' ? (
                   <>
-                    <option value="gemini-2.0-flash">gemini-2.0-flash (Recommended / Fast)</option>
-                    <option value="gemini-2.0-pro">gemini-2.0-pro (Recommended / Logic)</option>
-                    <option value="gemini-flash-latest">gemini-flash-latest (Legacy)</option>
-                    <option value="gemini-pro-latest">gemini-pro-latest (Legacy)</option>
+                    <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                    <option value="gemini-2.0-pro">gemini-2.0-pro</option>
+                    <option value="gemini-flash-latest">gemini-flash-latest</option>
+                    <option value="gemini-pro-latest">gemini-pro-latest</option>
+                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                    <option value="gemini-1.5-pro">gemini-1.5-pro</option>
                   </>
                 ) : (
                   <>
-                    <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Recommended)</option>
-                    <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Fast)</option>
+                    <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+                    <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
                     <option value="gemma2-9b-it">gemma2-9b-it</option>
                   </>
                 )}
