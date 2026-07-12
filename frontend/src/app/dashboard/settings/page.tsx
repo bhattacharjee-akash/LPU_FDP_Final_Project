@@ -27,7 +27,16 @@ export default function SettingsPage() {
         ]);
         
         setProvider(settingsRes.llm_provider || 'gemini');
-        setModelName(settingsRes.model_name || 'gemini-2.0-flash');
+        
+        let loadedModel = settingsRes.model_name || 'gemini-2.0-flash';
+        if (loadedModel === 'gemini-1.5-flash' || loadedModel === 'gemini-flash-latest') {
+          loadedModel = 'gemini-2.0-flash';
+        } else if (loadedModel === 'gemini-1.5-pro' || loadedModel === 'gemini-pro-latest') {
+          loadedModel = 'gemini-2.0-pro';
+        } else if (loadedModel === 'mixtral-8x7b-32768' || loadedModel === 'llama3-70b-8192') {
+          loadedModel = 'llama-3.3-70b-versatile';
+        }
+        setModelName(loadedModel);
         setTemperature(settingsRes.temperature !== undefined ? settingsRes.temperature : 0.7);
         
         setName(profileRes.name || '');
