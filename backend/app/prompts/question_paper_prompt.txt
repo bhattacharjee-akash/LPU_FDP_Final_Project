@@ -27,7 +27,7 @@ Return a JSON object matching this structure EXACTLY:
           {
             "question_number": 1,
             "text": "...",
-            "unit_reference": 1
+            "unit_reference": 1 // A single integer representing the primary unit. NEVER use commas or list multiple numbers (e.g. DO NOT write 1,2 or 1, 4, 6).
           }
         ]
       }
@@ -45,7 +45,7 @@ Return a JSON object matching this structure EXACTLY:
           {
             "question_number": 1,
             "text": "...",
-            "unit_reference": 1
+            "unit_reference": 1 // A single integer representing the primary unit. NEVER use commas or list multiple numbers (e.g. DO NOT write 1,2 or 1, 4, 6).
           }
         ]
       }
