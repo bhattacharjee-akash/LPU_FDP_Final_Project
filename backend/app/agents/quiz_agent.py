@@ -6,15 +6,11 @@ class QuizAgent(BaseAgent):
         system_instruction = self.read_prompt_template("quiz_prompt.txt")
         user_prompt = f"Using the course structure below, generate exactly 20 multiple-choice questions:\n\n{json.dumps(planning_data, indent=2)}"
         
-        if not self.gemini_key and not self.groq_key:
+        if self.should_use_fallback():
             return self._get_mock_response(planning_data)
             
-        try:
-            response_text = self.generate(system_instruction, user_prompt, json_mode=True)
-            return self.clean_json_response(response_text)
-        except Exception as e:
-            print(f"QuizAgent Error: {str(e)}. Using fallback mock data.")
-            return self._get_mock_response(planning_data)
+        response_text = self.generate(system_instruction, user_prompt, json_mode=True)
+        return self.clean_json_response(response_text)
 
     def _get_mock_response(self, planning_data: dict) -> dict:
         questions = []

@@ -10,15 +10,11 @@ class COMappingAgent(BaseAgent):
             f"Perform a Course Outcome (CO) mapping weightage analysis."
         )
         
-        if not self.gemini_key and not self.groq_key:
+        if self.should_use_fallback():
             return self._get_mock_response(planning_data, question_paper_data)
             
-        try:
-            response_text = self.generate(system_instruction, user_prompt, json_mode=True)
-            return self.clean_json_response(response_text)
-        except Exception as e:
-            print(f"COMappingAgent Error: {str(e)}. Using fallback mock data.")
-            return self._get_mock_response(planning_data, question_paper_data)
+        response_text = self.generate(system_instruction, user_prompt, json_mode=True)
+        return self.clean_json_response(response_text)
 
     def _get_mock_response(self, planning_data: dict, question_paper_data: dict) -> dict:
         cos = planning_data.get("course_outcomes", [])

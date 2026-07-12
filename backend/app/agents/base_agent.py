@@ -20,6 +20,12 @@ class BaseAgent:
             genai.configure(api_key=self.gemini_key)
         self.groq_client = Groq(api_key=self.groq_key) if self.groq_key else None
 
+    def should_use_fallback(self) -> bool:
+        """
+        Returns True if both Gemini and Groq keys are missing, forcing mock demo fallbacks.
+        """
+        return not self.gemini_key and not self.groq_key
+
     def read_prompt_template(self, filename: str) -> str:
         """
         Reads prompt text file from backend/app/prompts directory.

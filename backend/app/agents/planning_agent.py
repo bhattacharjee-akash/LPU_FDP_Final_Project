@@ -6,17 +6,11 @@ class PlanningAgent(BaseAgent):
         system_instruction = self.read_prompt_template("planning_prompt.txt")
         user_prompt = f"Analyze this course syllabus text:\n\n{syllabus_text}"
         
-        # Fallback handling for FDP demo if no API keys are provided
-        if not self.gemini_key and not self.groq_key:
+        if self.should_use_fallback():
             return self._get_mock_response(syllabus_text)
             
-        try:
-            response_text = self.generate(system_instruction, user_prompt, json_mode=True)
-            return self.clean_json_response(response_text)
-        except Exception as e:
-            # Return mock fallback in case of API failure so the execution pipeline doesn't break
-            print(f"PlanningAgent Error: {str(e)}. Using fallback mock data.")
-            return self._get_mock_response(syllabus_text)
+        response_text = self.generate(system_instruction, user_prompt, json_mode=True)
+        return self.clean_json_response(response_text)
 
     def _get_mock_response(self, syllabus_text: str) -> dict:
         # Standard mock parsing if no API key
