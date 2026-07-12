@@ -37,7 +37,7 @@ class ProfileResponse(ProfileBase):
 # Application Settings
 class SettingsBase(BaseModel):
     llm_provider: str = "gemini"
-    model_name: str = "gemini-flash-latest"
+    model_name: str = "gemini-2.0-flash"
     temperature: float = 0.7
 
 class SettingsUpdate(SettingsBase):

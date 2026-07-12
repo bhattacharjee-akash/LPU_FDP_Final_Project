@@ -24,7 +24,7 @@ def run_production_test():
     print("\nUpdating user settings to Groq (llama-3.3-70b-versatile)...")
     settings_payload = {
         "llm_provider": "groq",
-        "model_name": "llama-3.1-8b-instant",
+        "model_name": "llama-3.3-70b-versatile",
         "temperature": 0.7
     }
     settings_res = requests.put(f"{BACKEND_URL}/api/settings", headers=backend_headers, json=settings_payload)

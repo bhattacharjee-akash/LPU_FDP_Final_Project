@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 export default function SettingsPage() {
   const [provider, setProvider] = useState('gemini');
-  const [modelName, setModelName] = useState('gemini-flash-latest');
+  const [modelName, setModelName] = useState('gemini-2.0-flash');
   const [temperature, setTemperature] = useState(0.7);
   
   // Faculty Profile
@@ -27,7 +27,7 @@ export default function SettingsPage() {
         ]);
         
         setProvider(settingsRes.llm_provider || 'gemini');
-        setModelName(settingsRes.model_name || 'gemini-flash-latest');
+        setModelName(settingsRes.model_name || 'gemini-2.0-flash');
         setTemperature(settingsRes.temperature !== undefined ? settingsRes.temperature : 0.7);
         
         setName(profileRes.name || '');
@@ -131,7 +131,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => {
                     setProvider('gemini');
-                    setModelName('gemini-flash-latest');
+                    setModelName('gemini-2.0-flash');
                   }}
                   className={`py-3 rounded-xl font-bold border text-xs transition-all ${
                     provider === 'gemini' 
@@ -167,10 +167,10 @@ export default function SettingsPage() {
               >
                 {provider === 'gemini' ? (
                   <>
-                    <option value="gemini-flash-latest">gemini-flash-latest (Recommended / Fast)</option>
-                    <option value="gemini-pro-latest">gemini-pro-latest (Recommended / Logic)</option>
-                    <option value="gemini-2.5-flash">gemini-2.5-flash (Legacy)</option>
-                    <option value="gemini-2.5-pro">gemini-2.5-pro (Legacy)</option>
+                    <option value="gemini-2.0-flash">gemini-2.0-flash (Recommended / Fast)</option>
+                    <option value="gemini-2.0-pro">gemini-2.0-pro (Recommended / Logic)</option>
+                    <option value="gemini-flash-latest">gemini-flash-latest (Legacy)</option>
+                    <option value="gemini-pro-latest">gemini-pro-latest (Legacy)</option>
                   </>
                 ) : (
                   <>

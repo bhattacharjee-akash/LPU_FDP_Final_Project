@@ -18,8 +18,8 @@ class Settings(BaseSettings):
     
     # Defaults
     DEFAULT_LLM_PROVIDER: str = "gemini" # gemini or groq
-    DEFAULT_GEMINI_MODEL: str = "gemini-flash-latest"
-    DEFAULT_GROQ_MODEL: str = "llama-3.1-8b-instant"
+    DEFAULT_GEMINI_MODEL: str = "gemini-2.0-flash"
+    DEFAULT_GROQ_MODEL: str = "llama-3.3-70b-versatile"
     DEFAULT_TEMPERATURE: float = 0.7
     
     FRONTEND_URL: str = "http://localhost:3000"
