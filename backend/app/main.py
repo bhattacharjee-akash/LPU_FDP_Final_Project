@@ -480,3 +480,31 @@ def get_debug_models():
             "error": str(e),
             "traceback": traceback.format_exc()
         }
+
+@app.get("/api/test-models")
+def test_gemini_models():
+    import google.generativeai as genai
+    from app.config import settings
+    gemini_key = settings.GEMINI_API_KEY
+    if not gemini_key:
+        return {"error": "GEMINI_API_KEY is not configured in settings."}
+    try:
+        genai.configure(api_key=gemini_key)
+        test_models = [
+            "gemini-3.1-flash-lite",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-omni-flash-preview",
+            "gemini-pro-latest"
+        ]
+        results = {}
+        for m_name in test_models:
+            try:
+                model = genai.GenerativeModel(m_name)
+                response = model.generate_content("Say hello in one word.")
+                results[m_name] = {"status": "SUCCESS", "response": response.text.strip()}
+            except Exception as e:
+                results[m_name] = {"status": "FAILED", "error": str(e)}
+        return results
+    except Exception as e:
+        return {"error": str(e)}
