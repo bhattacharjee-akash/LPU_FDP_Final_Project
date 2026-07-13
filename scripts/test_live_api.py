@@ -16,17 +16,31 @@ def run_production_test():
     user_id = "dev-user-id"
     print(f"Bypassing Supabase login. Using developer test token: {access_token}. Mock User ID: {user_id}")
     
-    # 2. Upload sample syllabus PDF to the live Render Backend
-    print(f"\nUploading syllabus PDF: {SYLLABUS_FILE}...")
     backend_headers = {
         "Authorization": f"Bearer {access_token}"
     }
+
+    # Set user settings to Gemini 1.5 Flash
+    print("\nUpdating user settings to Gemini (gemini-1.5-flash)...")
+    settings_payload = {
+        "llm_provider": "gemini",
+        "model_name": "gemini-1.5-flash",
+        "temperature": 0.7
+    }
+    settings_res = requests.put(f"{BACKEND_URL}/api/settings", headers=backend_headers, json=settings_payload, verify=False)
+    if settings_res.status_code != 200:
+        print(f"Settings update failed: {settings_res.status_code} - {settings_res.text}")
+        return
+    print("Settings updated successfully!")
+    
+    # 2. Upload sample syllabus PDF to the live Render Backend
+    print(f"\nUploading syllabus PDF: {SYLLABUS_FILE}...")
     
     with open(SYLLABUS_FILE, "rb") as f:
         files = {
             "file": (os.path.basename(SYLLABUS_FILE), f, "application/pdf")
         }
-        upload_res = requests.post(f"{BACKEND_URL}/api/upload", headers=backend_headers, files=files)
+        upload_res = requests.post(f"{BACKEND_URL}/api/upload", headers=backend_headers, files=files, verify=False)
         
     if upload_res.status_code != 200:
         print(f"Upload failed: {upload_res.status_code} - {upload_res.text}")
@@ -43,7 +57,7 @@ def run_production_test():
     printed_logs = set()
     
     for attempt in range(60): # Poll for up to 5 minutes
-        status_res = requests.get(status_url, headers=backend_headers)
+        status_res = requests.get(status_url, headers=backend_headers, verify=False)
         if status_res.status_code != 200:
             print(f"Status poll failed: {status_res.status_code}")
             time.sleep(5)
@@ -61,10 +75,10 @@ def run_production_test():
                 printed_logs.add(log_key)
                 
         if current_status == "COMPLETED":
-            print("\n🎉 ORCHESTRATION COMPLETED SUCCESSFULLY IN PRODUCTION!")
+            print("\n=== ORCHESTRATION COMPLETED SUCCESSFULLY IN PRODUCTION! ===")
             break
         elif current_status == "FAILED":
-            print("\n❌ ORCHESTRATION FAILED IN PRODUCTION.")
+            print("\n=== ORCHESTRATION FAILED IN PRODUCTION ===")
             break
             
         time.sleep(5)

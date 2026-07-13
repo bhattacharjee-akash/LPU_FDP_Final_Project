@@ -55,11 +55,16 @@ def run_agentic_workflow(syllabus_id: int, user_id: str, provider: str, model_na
 
         # Map model names to the current active stable equivalents supported by the keys
         if provider == "gemini":
-            if model_name not in ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash", "gemini-2.0-pro", "gemini-flash-latest", "gemini-pro-latest"]:
-                if "pro" in model_name:
-                    model_name = "gemini-1.5-pro"
-                else:
-                    model_name = "gemini-1.5-flash"
+            if model_name in ["gemini-1.5-flash", "gemini-flash-latest"]:
+                model_name = "gemini-1.5-flash-latest"
+            elif model_name in ["gemini-1.5-pro", "gemini-pro-latest"]:
+                model_name = "gemini-1.5-pro-latest"
+            elif model_name in ["gemini-2.0-flash"]:
+                model_name = "gemini-2.0-flash"
+            elif model_name in ["gemini-2.0-pro"]:
+                model_name = "gemini-2.0-pro"
+            else:
+                model_name = "gemini-1.5-flash-latest"
         elif provider == "groq":
             if model_name in ["mixtral-8x7b-32768", "llama3-70b-8192", "llama-3.3-70b-versatile"]:
                 model_name = "llama-3.3-70b-versatile"
