@@ -102,6 +102,7 @@ export default function LoginPage() {
           } catch (e) {
             console.log("Profile save failed or already exists.");
           }
+        }
         sessionStorage.setItem('fdp_session_verified', 'true');
         router.push('/dashboard');
       }
