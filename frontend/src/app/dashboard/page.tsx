@@ -221,7 +221,7 @@ export default function DashboardOverview() {
             <div className="flex flex-col gap-4 border-t border-white/5 pt-4 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-gray-500">Orchestrator LLM</span>
-                <span className="font-semibold text-white bg-lpu-orange/10 text-lpu-orange px-2 py-0.5 rounded">Gemini 1.5 Flash</span>
+                <span className="font-semibold text-white bg-lpu-orange/10 text-lpu-orange px-2 py-0.5 rounded">gemini-3.1-flash-lite</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-500">Secondary Provider</span>
