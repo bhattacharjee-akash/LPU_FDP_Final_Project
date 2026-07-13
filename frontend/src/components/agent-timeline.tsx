@@ -33,6 +33,13 @@ export default function AgentTimeline({ logs, currentStatus }: AgentTimelineProp
   ];
 
   const getAgentStatus = (agentKey: string) => {
+    if (agentKey === 'System') {
+      const systemLogs = logs.filter(l => l.agent_name === 'System');
+      const isFailed = systemLogs.some(l => l.status === 'FAILED') || currentStatus === 'FAILED';
+      if (isFailed) return 'FAILED';
+      return 'COMPLETED';
+    }
+
     const agentLogs = logs.filter(l => l.agent_name === agentKey);
     if (agentLogs.length === 0) return 'PENDING';
     
