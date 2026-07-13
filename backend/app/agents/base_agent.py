@@ -40,7 +40,10 @@ class BaseAgent:
     def generate(self, system_instruction: str, user_prompt: str, json_mode: bool = True) -> str:
         """
         Executes generation using the chosen LLM provider (Gemini or Groq).
+        Throttled to max 5 requests per minute (12 seconds delay between calls).
         """
+        import time
+        time.sleep(12)
         if self.provider == "gemini":
             return self._generate_gemini(system_instruction, user_prompt, json_mode)
         elif self.provider == "groq":
