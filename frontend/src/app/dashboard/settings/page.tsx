@@ -28,12 +28,8 @@ export default function SettingsPage() {
         
         setProvider(settingsRes.llm_provider || 'gemini');
         
-        let loadedModel = settingsRes.model_name || 'gemini-2.0-flash';
-        if (loadedModel === 'gemini-1.5-flash' || loadedModel === 'gemini-flash-latest') {
-          loadedModel = 'gemini-2.0-flash';
-        } else if (loadedModel === 'gemini-1.5-pro' || loadedModel === 'gemini-pro-latest') {
-          loadedModel = 'gemini-2.0-pro';
-        } else if (loadedModel === 'mixtral-8x7b-32768' || loadedModel === 'llama3-70b-8192') {
+        let loadedModel = settingsRes.model_name || 'gemini-1.5-flash';
+        if (loadedModel === 'mixtral-8x7b-32768' || loadedModel === 'llama3-70b-8192') {
           loadedModel = 'llama-3.3-70b-versatile';
         }
         setModelName(loadedModel);
@@ -140,7 +136,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => {
                     setProvider('gemini');
-                    setModelName('gemini-2.0-flash');
+                    setModelName('gemini-1.5-flash');
                   }}
                   className={`py-3 rounded-xl font-bold border text-xs transition-all ${
                     provider === 'gemini' 
@@ -176,6 +172,8 @@ export default function SettingsPage() {
               >
                 {provider === 'gemini' ? (
                   <>
+                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                    <option value="gemini-1.5-pro">gemini-1.5-pro</option>
                     <option value="gemini-2.0-flash">gemini-2.0-flash</option>
                     <option value="gemini-2.0-pro">gemini-2.0-pro</option>
                   </>
