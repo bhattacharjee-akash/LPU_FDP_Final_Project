@@ -423,9 +423,27 @@ class PDFGenerator:
         
         # Quality report details
         story.append(Paragraph("Academic Quality Score Card", h2_style))
-        q_scores = quality_report.get("dimensions", {})
+        # Extract flat or nested dimensions/scores to support both direct and DB formats
+        overall_score = 0
+        q_scores = {}
+        if isinstance(quality_report, dict):
+            overall_score = quality_report.get("score") or quality_report.get("overall_score")
+            q_scores = quality_report.get("dimensions") or {}
+            
+            # If nested in content key (database format)
+            if not overall_score or not q_scores:
+                content = quality_report.get("content") or {}
+                if isinstance(content, dict):
+                    overall_score = overall_score or content.get("overall_score") or content.get("score")
+                    q_scores = q_scores or content.get("dimensions") or {}
+                    
+        if not overall_score:
+            overall_score = 0
+        if not q_scores:
+            q_scores = {}
+            
         score_info = f"""
-        <b>Overall Compliance Score:</b> {quality_report.get('overall_score', 0)}/100<br/>
+        <b>Overall Compliance Score:</b> {overall_score}/100<br/>
         • <b>CO-Exam Alignment:</b> {q_scores.get('alignment', 0)}/100<br/>
         • <b>Curriculum Coverage:</b> {q_scores.get('coverage', 0)}/100<br/>
         • <b>Clarity & Rigor:</b> {q_scores.get('clarity_and_rigor', 0)}/100<br/>

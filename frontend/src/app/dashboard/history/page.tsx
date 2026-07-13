@@ -187,7 +187,12 @@ export default function HistoryPage() {
   // --- DETAIL VIEW LAYOUT ---
   if (selectedReport) {
     const course = selectedReport.syllabus;
-    const qRep = selectedReport.quality_report || { score: 0, dimensions: {}, suggestions: [] };
+    const rawQRep = selectedReport.quality_report || {};
+    const qRep = {
+      score: rawQRep.score || rawQRep.content?.overall_score || rawQRep.content?.score || 0,
+      dimensions: rawQRep.dimensions || rawQRep.content?.dimensions || {},
+      suggestions: rawQRep.suggestions || rawQRep.content?.suggestions || []
+    };
     
     const tabs = [
       { id: 'lesson_plan', label: '15-Week Plan' },
