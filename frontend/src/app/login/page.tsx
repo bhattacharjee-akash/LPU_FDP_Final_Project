@@ -63,17 +63,26 @@ export default function LoginPage() {
         // Trigger profile update route
         const token = data.session?.access_token;
         if (token) {
-          await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/profile`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ name: facultyName, department, user_id: data.user?.id })
-          });
+          try {
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/profile`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ name: facultyName, department, user_id: data.user?.id })
+            });
+          } catch (e) {
+            console.log("Profile save failed or already exists.");
+          }
+
+          // Auto-login since session is active!
+          sessionStorage.setItem('fdp_session_verified', 'true');
+          router.push('/dashboard');
+          return;
         }
 
-        alert("Sign up successful! Please log in.");
+        alert("Sign up successful! Please check your email to verify your account, then log in.");
         setIsSignUp(false);
       } else {
         // Log In Flow
