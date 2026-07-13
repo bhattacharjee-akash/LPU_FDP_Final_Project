@@ -23,6 +23,7 @@ export default function LoginPage() {
     if (isSupabaseConfigured) {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
+          sessionStorage.setItem('fdp_session_verified', 'true');
           router.push('/dashboard');
         }
       });
@@ -101,7 +102,7 @@ export default function LoginPage() {
           } catch (e) {
             console.log("Profile save failed or already exists.");
           }
-        }
+        sessionStorage.setItem('fdp_session_verified', 'true');
         router.push('/dashboard');
       }
     } catch (err: any) {

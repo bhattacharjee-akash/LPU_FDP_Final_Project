@@ -29,24 +29,43 @@ export default function DashboardLayout({
         return;
       }
 
-      // 2. Check Supabase session
-      if (isSupabaseConfigured) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          router.push('/login');
-          return;
+      // 2. Check cached session verification for instant UI loading
+      const cachedSession = sessionStorage.getItem('fdp_session_verified') === 'true';
+      if (cachedSession) {
+        setLoading(false);
+        const name = localStorage.getItem('faculty_name');
+        const dept = localStorage.getItem('department');
+        if (name && dept) {
+          setProfile({ name, department: dept });
         }
+      }
 
-        // Load profile from backend
+      // 3. Perform actual security verification in background
+      if (isSupabaseConfigured) {
         try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) {
+            sessionStorage.removeItem('fdp_session_verified');
+            router.push('/login');
+            return;
+          }
+
+          // Store verified status in sessionStorage
+          sessionStorage.setItem('fdp_session_verified', 'true');
+
+          // Load profile from backend
           const prof = await api.getProfile();
-          if (prof) setProfile({ name: prof.name, department: prof.department });
+          if (prof) {
+            setProfile({ name: prof.name, department: prof.department });
+            localStorage.setItem('faculty_name', prof.name);
+            localStorage.setItem('department', prof.department);
+          }
         } catch (e) {
-          console.log("Could not load backend profile metadata");
+          console.log("Could not load backend profile metadata", e);
         }
         setLoading(false);
       } else {
-        // Redirect to login to setup mock credentials
+        sessionStorage.removeItem('fdp_session_verified');
         router.push('/login');
       }
     }
